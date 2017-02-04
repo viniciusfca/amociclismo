@@ -35,6 +35,8 @@ public class UsuarioBean {
      */
     public void salvarUsuario(){
         
+        usuarioDAO.inserirUsuario(usuario);
+        
     }
     
     //Getters and Setters
