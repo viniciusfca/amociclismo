@@ -5,6 +5,7 @@
  */
 package br.com.amociclismo.entity;
 
+import br.com.amociclismo.util.Util;
 import java.util.Date;
 
 /**
@@ -30,9 +31,17 @@ public class Usuario {
     private String senha;
     private String tipo;
     private String ip;
-    
+    private String cep;
     private Date dataNascimento;
     private Date dataCadastro;
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = Util.retirarPontos(cep);
+    }
 
     public int getId() {
         return id;
@@ -63,7 +72,7 @@ public class Usuario {
     }
 
     public void setCpf(String cpf) {
-        this.cpf = cpf;
+        this.cpf = Util.retirarPontos(cpf);
     }
 
     public String getRg() {
@@ -87,7 +96,7 @@ public class Usuario {
     }
 
     public void setTelefone(String telefone) {
-        this.telefone = telefone;
+        this.telefone = Util.retirarPontos(telefone);
     }
 
     public String getCelular() {
@@ -95,7 +104,7 @@ public class Usuario {
     }
 
     public void setCelular(String celular) {
-        this.celular = celular;
+        this.celular = Util.retirarPontos(celular);
     }
 
     public String getEndereco() {

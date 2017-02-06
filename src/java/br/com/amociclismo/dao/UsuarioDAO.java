@@ -7,9 +7,11 @@ package br.com.amociclismo.dao;
 
 import br.com.amociclismo.entity.Usuario;
 import br.com.amociclismo.util.Conexao;
+import br.com.amociclismo.util.Util;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -28,7 +30,7 @@ public class UsuarioDAO {
         
         try{
             
-            cst = conexao.conectar().prepareCall("{call amociclismo.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            cst = conexao.conectar().prepareCall("{call amociclismo.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             cst.setString(1, usuario.getNome());
             cst.setString(2, usuario.getSexo());
             cst.setString(3, usuario.getCpf());
@@ -41,11 +43,12 @@ public class UsuarioDAO {
             cst.setString(10, usuario.getNumero());
             cst.setString(11, usuario.getBairro());
             cst.setString(12, usuario.getComplemento());
-            cst.setString(13, usuario.getCpf());
+            cst.setString(13, usuario.getCep());
             cst.setString(14, usuario.getCidade());
             cst.setString(15, usuario.getUf());
-            cst.setString(16, usuario.getTipo());
-            cst.setString(17, usuario.getIp());
+            cst.setString(16, Util.encrypt(usuario.getSenha()));
+            cst.setString(17, "P");
+            cst.setString(18, Util.getIp());
             
             cst.execute();
             

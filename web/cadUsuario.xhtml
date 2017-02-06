@@ -10,107 +10,7 @@
     <ui:define name="content" >
         <div class="main" >
             <center>
-                <!--                <div class="panel panel-info" style="font-size: 11px;margin-top: 1%; width: 90%;"  >
-                                    <div style="text-align: left" class="panel-heading" >
-                                        <b>CADASTRO DE BIKE</b>
-                                    </div>
-                
-                                    <div class="panel" style="height: 10px;">
-                                    </div>
-                
-                
-                                    <div class="panel-body" style="margin-top: -1.3%">
-                                        
-                
-                                    </div>
-                
-                                </div>-->
-
                 <h:form style="margin-top: -25px;height: 1080px;width: 100%;" >
-
-                    <p:dialog resizable="false" id="dlgTelefone" widgetVar="dlgTelefone" width="800">
-                        <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
-                            <div class="panel-heading" >
-                                <b>CADASTRAR TELEFONE</b>
-                            </div>
-
-                            <div class="panel" style="height: 10px;">
-                            </div>
-
-                            <div class="panel-body" style="margin-top: -1.3%">
-
-                                <div class="row" >
-                                    <div class="col-lg-12">
-                                        <div class="row">
-
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu"  value="Novo"/>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Salvar"/>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Procurar"/>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <p:separator/>
-
-                                <div class="row">
-
-                                    <div class="col-lg-4">
-                                        <p:outputLabel value="Tipo:" style="display: block"/>
-                                        <p:selectOneMenu style="width: 100%">
-                                            <f:selectItem itemLabel="Fixo"/>
-                                            <f:selectItem itemLabel="Celular"/>
-                                        </p:selectOneMenu>
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <p:outputLabel value="Número:" style="display: block"/>
-                                        <p:inputText style="width: 100%"/>
-                                    </div>
-
-                                </div>
-
-                                <div class="row" style="margin-top: 1%;text-align: left" >       
-                                    <div class="col-lg-12">
-
-                                        <p:commandButton styleClass="ui-button" icon="ui-icon-plus" style="width: 145px; height: 27px" value="Adicionar telefone"/>
-
-                                        <p:dataTable style="margin-top: 1%;" emptyMessage="Nenhum telefone cadastrado.">
-                                            <f:facet  name="header">
-                                                Telefones
-                                            </f:facet>
-
-                                            <p:column headerText="Editar">
-                                                <p:commandButton action="#{PessoaMB.setPessoa(pessoaDT)}" style="width: 30px;width: 30px" icon="ui-icon-check" update="formCadastro"/>
-                                            </p:column>
-
-                                            <p:column headerText="Tipo">
-                                                <p:outputLabel />
-                                            </p:column>
-
-                                            <p:column headerText="Número">
-                                                <p:outputLabel/>
-                                            </p:column>
-
-                                            <p:column headerText="Excluir">
-                                                <p:outputLabel/>
-                                            </p:column>
-
-                                        </p:dataTable>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </p:dialog>
 
                     <h:body >
                         <div class="panel panel-info" style="font-size: 11px;margin-top: 8%; width: 85%;"  >
@@ -128,7 +28,7 @@
                                         <div class="row">
 
                                             <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Salvar"/>
+                                                <p:commandButton styleClass="btn-menu" action="#{usuarioMB.salvarUsuario()}" value="Salvar"/>
                                             </div>
 
                                             <div class="col-lg-2">
@@ -148,31 +48,47 @@
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="CPF:" style="display: block"/>
-                                        <p:inputMask value="#{usuarioMB.usuario.cpf}" mask="999.999.999-99" placeholder="000.000.000-00"/>
+                                        <p:inputMask id="CPF" label="CPF" value="#{usuarioMB.usuario.cpf}" required="true" mask="999.999.999-99" placeholder="000.000.000-00"/>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <p:outputLabel value="Nome:" style="display: block"/>
-                                        <p:inputText style="width: 86%"/>
+                                        <p:inputText id="Nome" label="Nome" value="#{usuarioMB.usuario.nome}" required="true" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="RG:" style="display: block"/>
-                                        <p:inputText />
+                                        <p:inputText id="RG" label="RG" required="true" value="#{usuarioMB.usuario.rg}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Data de Nascimento:" style="display: block"/>
-                                        <p:calendar showOn="false" mask="99/99/9999" effect="slide" pattern="dd/MM/yyyy" locale="pt" />
+                                        <p:calendar id="Nascimento" label="Data de Nascimento" required="true" value="#{usuarioMB.usuario.dataNascimento}" showOn="false" mask="99/99/9999" effect="slide" pattern="dd/MM/yyyy" locale="pt" />
                                     </div>
-
+                                    
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="Sexo:" style="display: block"/>
+                                        <p:selectOneMenu value="#{usuarioMB.usuario.sexo}">
+                                            <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                                            <f:selectItem itemLabel="Feminino" itemValue="F"/>
+                                        </p:selectOneMenu>
+                                    </div>
 
 
 
                                 </div>
 
                                 <div class="row" style="margin-top: 1%">
-
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Senha:" style="display: block"/>
+                                        <p:password required="true" id="Senha" label="Senha" value="#{usuarioMB.usuario.senha}"/>
+                                    </div>
+                                    
+                                    <div class="col-lg-3" style="margin-left: -8.5%">
+                                        <p:outputLabel value="Confirmar Senha:" style="display: block"/>
+                                        <p:password required="SenhaConf" label="Confirmar Senha" value="#{usuarioMB.validaSenha}"/>
+                                    </div>
+                                    
                                 </div>
 
                                 <p:separator title="Dados de Endereço"/>
@@ -180,22 +96,22 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-2">
                                         <p:outputLabel value="CEP:" style="display: block"/>
-                                        <p:inputMask mask="99.999-999" style="width: 90%"/>
+                                        <p:inputMask id="CEP" label="CEP" required="true" value="#{usuarioMB.usuario.cep}" mask="99.999-999" style="width: 90%"/>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <p:outputLabel value="Endereço:" style="display: block"/>
-                                        <p:inputText style="width: 86%"/>
+                                        <p:inputText id="Endereço" label="Endereço" required="true" value="#{usuarioMB.usuario.endereco}" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Número:" style="display: block"/>
-                                        <p:inputNumber />
+                                        <p:inputMask id="Número" label="Número" required="true" mask="9?9999" value="#{usuarioMB.usuario.numero}"  />
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Complemento:" style="display: block"/>
-                                        <p:inputText />
+                                        <p:inputText value="#{usuarioMB.usuario.complemento}" />
                                     </div>
 
                                 </div>
@@ -203,19 +119,44 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Bairro:" style="display: block"/>
-                                        <p:inputText style="width: 90%"/>
+                                        <p:inputText id="Bairro" label="Bairro" required="true" value="#{usuarioMB.usuario.bairro}" style="width: 90%"/>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <p:outputLabel value="Cidade:" style="display: block"/>
-                                        <p:inputText style="width: 86%"/>
+                                        <p:inputText id="Cidade" label="Cidade" required="true" value="#{usuarioMB.usuario.cidade}" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Estado:" style="display: block"/>
-                                        <p:selectOneMenu >
-                                            <f:selectItem itemLabel="AC"/>
-                                            <f:selectItem itemLabel="SP"/>
+                                        <p:selectOneMenu value="#{usuarioMB.usuario.uf}" >
+                                            <f:selectItem itemLabel="Acre" itemValue="AC"/>
+                                            <f:selectItem itemLabel="Alagoas" itemValue="AL"/>
+                                            <f:selectItem itemLabel="Amapá" itemValue="AP"/>
+                                            <f:selectItem itemLabel="Amazonas" itemValue="AM"/>
+                                            <f:selectItem itemLabel="Bahia" itemValue="BA"/>
+                                            <f:selectItem itemLabel="Ceará" itemValue="CE"/>
+                                            <f:selectItem itemLabel="Distrito Federal" itemValue="DF"/>
+                                            <f:selectItem itemLabel="Espírito Santo" itemValue="ES"/>
+                                            <f:selectItem itemLabel="Goiás" itemValue="GO"/>
+                                            <f:selectItem itemLabel="Maranhão" itemValue="MA"/>
+                                            <f:selectItem itemLabel="Mato Grosso" itemValue="MT"/>
+                                            <f:selectItem itemLabel="Mato Grosso do Sul" itemValue="MS"/>
+                                            <f:selectItem itemLabel="Minas Gerais" itemValue="MG"/>
+                                            <f:selectItem itemLabel="Pará" itemValue="PA"/>
+                                            <f:selectItem itemLabel="Paraíba" itemValue="PB"/>
+                                            <f:selectItem itemLabel="Paraná" itemValue="PR"/>
+                                            <f:selectItem itemLabel="Pernambuco" itemValue="PE"/>
+                                            <f:selectItem itemLabel="Piauí" itemValue="PI"/>
+                                            <f:selectItem itemLabel="Rio de Janeiro" itemValue="RJ"/>
+                                            <f:selectItem itemLabel="Rio Grande do Norte" itemValue="RN"/>
+                                            <f:selectItem itemLabel="Rio Grande do Sul" itemValue="RS"/>
+                                            <f:selectItem itemLabel="Rondônia" itemValue="RO"/>
+                                            <f:selectItem itemLabel="Roraima" itemValue="RR"/>
+                                            <f:selectItem itemLabel="Santa Catarina" itemValue="SC"/>
+                                            <f:selectItem itemLabel="São Paulo" itemValue="SP"/>
+                                            <f:selectItem itemLabel="Sergipe" itemValue="SE"/>
+                                            <f:selectItem itemLabel="Tocantins" itemValue="TO"/>
                                         </p:selectOneMenu>
                                     </div>
 
@@ -226,36 +167,26 @@
 
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-3">
-                                        <p:outputLabel value="E-mail Pessoal" style="display: block"/>
-                                        <p:inputText style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                        <p:outputLabel value="E-mail:" style="display: block"/>
+                                        <p:inputText id="E-mail" label="E-mail" required="true" value="#{usuarioMB.usuario.email}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                    </div>
+                                    
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Confirmar E-mail:" style="display: block"/>
+                                        <p:inputText id="E-mail_Conf" label="E-mail" required="true" value="#{usuarioMB.validaEmail}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                    </div>
+                                    
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Telefone:" style="display: block"/>
+                                        <p:inputMask id="Telefone" label="Telefone" required="true" mask="(99)9999-9999" value="#{usuarioMB.usuario.telefone}" style="width: 100%" placeholder="(00)0000-0000"/>
+                                    </div>
+                                    
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Celular:" style="display: block"/>
+                                        <p:inputMask id="Celular" label="Celular" required="true" mask="(99)99999-9999" value="#{usuarioMB.usuario.celular}" style="width: 100%" placeholder="(00)00000-0000"/>
                                     </div>
 
-                                </div>
-
-                                <div class="row" style="margin-top: 1%; text-align: left">       
-                                    <div class="col-lg-12">
-
-                                        <p:commandButton onclick="PF('dlgTelefone').show();" styleClass="ui-button" icon="ui-icon-plus" style="width: 145px; height: 27px" value="Adicionar telefone"/>
-
-                                        <p:dataTable style="margin-top: 1%;" emptyMessage="Nenhum telefone cadastrado.">
-                                            <f:facet  name="header">
-                                                Telefones
-                                            </f:facet>
-
-                                            <p:column headerText="Editar">
-                                                <p:commandButton action="#{PessoaMB.setPessoa(pessoaDT)}" style="width: 30px;width: 30px" icon="ui-icon-check" update="formCadastro"/>
-                                            </p:column>
-
-                                            <p:column headerText="Tipo">
-                                                <p:outputLabel />
-                                            </p:column>
-
-                                            <p:column headerText="Número">
-                                                <p:outputLabel/>
-                                            </p:column>
-
-                                        </p:dataTable>
-                                    </div>
+                                    
                                 </div>
 
                             </div>
