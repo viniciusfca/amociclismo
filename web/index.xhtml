@@ -10,7 +10,7 @@
     <ui:define name="content" >
         <div class="main" >
             
-            <div class="modal-dialog" >
+            <div class="modal-dialog" style="margin-top: 2%">
                 <form id="formLogin" action="login.jsf" method="post">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -28,11 +28,14 @@
 
                             <div class="form-group">
                                 <input type="submit" class="btn btn-block btn-lg btn-primary" value="Logar"/>
-                                <span class="pull-right"><a href="cadUsuario.jsf">Registrar</a></span><span><a href="#">Esqueci a senha</a></span>
+                                <span class="pull-right"><a href="cadUsuario.jsf"><b>Cadastre-se</b></a></span><span><a href="#"><b>Esqueci a senha</b></a></span>
                             </div>
                         </div>
                     </div>
                 </form>
+            </div>
+            <div style="margin-top: -10%">
+            <ui:include  src="/patrocinio.xhtml" />
             </div>
         </div>
     </ui:define>
