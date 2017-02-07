@@ -7,6 +7,7 @@ package br.com.amociclismo.util;
 
 import br.com.amociclismo.entity.Usuario;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
@@ -54,6 +55,28 @@ public class Util {
     public static void colocarUsuarioSessao(Usuario usuario){
         HttpSession ses = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         ses.setAttribute("usuarioLogado", usuario);            
+    }
+    
+    /**
+     * Método que converte a Date util para Date sql
+     *
+     * @param myDate
+     * @return
+     */
+    public static java.sql.Date tratarData(java.util.Date myDate) {
+        java.util.Calendar cal = Calendar.getInstance();
+
+        cal.setTime(myDate);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        // adiciono um dia, porque por algum motivo ele volta um dia
+        //cal.add(Calendar.DAY_OF_MONTH, 1);
+        java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+
+        return sqlDate;
     }
     
     

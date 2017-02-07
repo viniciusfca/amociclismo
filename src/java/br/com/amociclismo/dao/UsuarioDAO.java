@@ -36,7 +36,7 @@ public class UsuarioDAO {
             cst.setString(2, usuario.getSexo());
             cst.setString(3, usuario.getCpf());
             cst.setString(4, usuario.getRg());
-            cst.setDate(5, new java.sql.Date(usuario.getDataNascimento().getTime()));
+            cst.setDate(5, Util.tratarData(usuario.getDataNascimento()));
             cst.setString(6, usuario.getEmail());
             cst.setString(7, usuario.getTelefone());
             cst.setString(8, usuario.getCelular());
