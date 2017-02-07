@@ -69,7 +69,13 @@ and open the template in the editor.
                     <p:panel style="border: none; background: none" rendered="#{loginMB.retornarUsuarioLogado() != null}">
                     <ui:include src="/menu.xhtml" />
                     </p:panel>
+                    
                     <ui:insert name="content" />
+                    
+                    <div style="margin-top: -10%">
+                    <ui:include  src="/patrocinio.xhtml" />
+                    </div>
+                    
                 </div>
             </p:layoutUnit>
 

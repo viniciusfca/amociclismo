@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>AMO CICLISMO</title>
+        <h:outputStylesheet library="css" name="bootstrap.css" />
+        <h:outputScript library="js" name="locale-primefaces.js" />
+
+    </h:head>
+
+    <body >
+        <h:body >
+            <center>
+                <h:form style="height: 113px; width: 88%"  >
+                    <p:carousel  numVisible="2" effect="fade" circular="true" autoPlayInterval="5000" style="width: 600px;height: 200px; " value="#{patrocinioMB.patrocinios}" headerText="Patrocinadores" var="pat" itemStyle="text-align:center" responsive="true">
+                        <p:panelGrid columns="2"  columnClasses="label,value" layout="grid" styleClass="ui-panelgrid-blank">
+                            <f:facet name="header">
+                                <a href="#{pat.url}" target="_blank"><p:graphicImage  style="width: 130px;height: 130px;" url="#{pat.urlImage}" /> </a>
+                            </f:facet>
+
+<!--                            <h:outputText value="Nome:" />
+                            <h:outputText value="#{pat.nome}" />-->
+
+                        </p:panelGrid>
+
+                    </p:carousel>
+
+                </h:form>      
+            </center>
+        </h:body>
+    </body>
+</ui:composition>
