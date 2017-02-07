@@ -60,13 +60,15 @@ and open the template in the editor.
         <p:growl autoUpdate="true" showDetail="true" life="5000" />
 
         <p:layout fullPage="true">
-           
 
             <p:layoutUnit position="center">
-                <!--                <div style="position: fixed;width: 98%; z-index: 999;margin-top: -4px">
-                                <ui:include src="/menu.xhtml"/>
-                                </div>-->
+
+               
+
                 <div style="overflow-x: auto;background-image:url('https://movimentese.catracalivre.com.br/wp-content/uploads/sites/19/2016/04/Ciclista-iStock.jpg'); height: 100%">
+                    <p:panel style="border: none; background: none" rendered="#{loginMB.retornarUsuarioLogado() != null}">
+                    <ui:include src="/menu.xhtml" />
+                    </p:panel>
                     <ui:insert name="content" />
                 </div>
             </p:layoutUnit>

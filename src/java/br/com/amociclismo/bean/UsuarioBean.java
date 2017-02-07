@@ -55,6 +55,20 @@ public class UsuarioBean {
                     
         }
         
+        if(!usuario.getSenha().trim().equals(validaSenha.trim())){
+             msg += "Senhas não conferem.";
+        }
+        
+        if(usuario.getDataNascimento() == null){
+            msg += "Data de nascimento é um campo obrigatório.";
+        }
+        
+        if(usuario.getId() > 0){
+            msg += "O CPF informado já está cadastrado na nossa base.";
+        }
+        
+        
+        
         return msg;
     }
     
@@ -74,6 +88,22 @@ public class UsuarioBean {
             Util.saveMessage("Sucesso!", "Cadastro efetuado com sucesso.");
         }else{
             Util.saveMessage("Atenção", "Falha ao efetuar cadastro.");
+        }
+        
+    }
+    
+    /**
+     * Metodo que retorna o um usuario pelo cpf
+     */
+    public void buscarUsuarioNovoByCpf(){
+        String cpf = usuario.getCpf();
+        usuario = usuarioDAO.getUsuarioByCpf(usuario.getCpf());
+        usuario.setCpf(cpf);
+        
+        if(usuario.getId() > 0 ){
+            Util.saveMessage("Atenção", "O CPF informado já está cadastrado na nossa base.");
+            usuario = new Usuario();
+            usuario.setCpf(cpf);
         }
         
     }

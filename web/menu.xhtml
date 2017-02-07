@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>SICOOBCREDACIF</title>
+        <h:outputStylesheet library="css" name="bootstrap.css" />
+        <h:outputScript library="js" name="locale-primefaces.js" />
+
+    </h:head>
+
+    <body >
+        <h:body >
+            <center>
+                <h:form style="height: 113px; width: 88%"  >
+
+                    <p:menubar style="font-size: 11px;font-weight: bold" >
+                        <p:menuitem style="font-weight: bold"  value="Cadastrar Bicicleta" url="/restrito/cadBike.jsf" />
+                        <p:menuitem style="font-weight: bold"  value=" | Buscar Bicicleta" url="#" />
+                        <p:menuitem style="font-weight: bold"  value=" | Buscar Usuários" url="#" />
+                        <f:facet name="options">
+
+                            <div class="row" style="margin-left: -35%">
+                                <div class="col-lg-9" style="margin-top: 1%; text-align: right">
+                                    <p:outputLabel  value="Olá, #{loginMB.retornarUsuarioLogado().nome}"/>
+                                </div>
+                                <div class="col-lg-1">
+                                    <p:commandButton action="#{loginMB.doLogout()}" value="Sair" icon="ui-icon-extlink" />
+                                </div>
+
+                            </div>
+
+                        </f:facet>
+                    </p:menubar>
+
+
+
+                    <!--            <center><img src="http://www.credacif.com.br/imagens/logoCred.png" style="margin-top: 15%"/></center>
+                                <center><img src="http://www.credacif.com.br/imagens/credNossa.png" style="margin-top: 2%; width: 15%; margin-left: 3.5%"/></center>-->
+                </h:form>      
+            </center>
+        </h:body>
+    </body>
+</ui:composition>

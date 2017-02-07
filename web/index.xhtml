@@ -9,19 +9,21 @@
 
     <ui:define name="content" >
         <div class="main" >
+            
             <div class="modal-dialog" >
-                <form>
+                <form id="formLogin" action="login.jsf" method="post">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="text-center">Seja Bem-Vindo(a)</h1>
+                            <center><p:outputLabel rendered="#{loginMB.mostrarErro}" value="#{loginMB.erroLogar}" style="text-align: center; color: blue"/></center>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <input type="text" required="true" class="form-control input-lg" placeholder="CPF"/>
+                                <input type="text" required="true" class="form-control input-lg" name="user" placeholder="CPF"/>
                             </div>
 
                             <div class="form-group">
-                                <input type="password" required="true" class="form-control input-lg" placeholder="SENHA"/>
+                                <input type="password" required="true" class="form-control input-lg" name="pass" placeholder="SENHA"/>
                             </div>
 
                             <div class="form-group">

@@ -18,18 +18,19 @@ import javax.faces.context.FacesContext;
  * @author Vinicius
  */
 public class UsuarioDAO {
-    
+
     /**
      * Metodo que insere um novo usuário na base
+     *
      * @param usuario
-     * @return 
+     * @return
      */
-    public Usuario inserirUsuario(Usuario usuario){
+    public Usuario inserirUsuario(Usuario usuario) {
         Conexao conexao = new Conexao();
         CallableStatement cst = null;
-        
-        try{
-            
+
+        try {
+
             cst = conexao.conectar().prepareCall("{call amociclismo.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             cst.setString(1, usuario.getNome());
             cst.setString(2, usuario.getSexo());
@@ -49,16 +50,104 @@ public class UsuarioDAO {
             cst.setString(16, Util.encrypt(usuario.getSenha()));
             cst.setString(17, "P");
             cst.setString(18, Util.getIp());
-            
+
             cst.execute();
-            
-            
-            PreparedStatement ps =  conexao.conectar().prepareStatement("SELECT id FROM usuario WHERE cpf = ?");
+
+            PreparedStatement ps = conexao.conectar().prepareStatement("SELECT id FROM usuario WHERE cpf = ?");
             ps.setString(1, usuario.getCpf());
             ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
+
+            if (rs.next()) {
                 usuario.setId(rs.getInt("id"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return usuario;
+    }
+
+    public Usuario getUsuarioByCpf(String cpf) {
+        Conexao conexao = new Conexao();
+        CallableStatement cst = null;
+        Usuario usuario = new Usuario();
+        try {
+            cst = conexao.conectar().prepareCall("{call amociclismo.getUsuarioByCpf(?)}");
+            cst.setString(1, cpf);
+
+            ResultSet rs = cst.executeQuery();
+            if (rs.next()) {
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setCpf(rs.getString("cpf"));
+                usuario.setRg(rs.getString("rg"));
+                usuario.setDataNascimento(rs.getDate("dataNascimento"));
+                usuario.setDataCadastro(rs.getDate("dataCadastro"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNumero(rs.getString("numero"));
+                usuario.setBairro(rs.getString("bairro"));
+                usuario.setCidade(rs.getString("cidade"));
+                usuario.setComplemento(rs.getString("complemento"));
+                usuario.setUf(rs.getString("uf"));
+                usuario.setTelefone(rs.getString("telefone"));
+                usuario.setCelular(rs.getString("celular"));
+                usuario.setIp(rs.getString("ip"));
+                usuario.setTipo(rs.getString("tipo"));
+                usuario.setSexo(rs.getString("sexo"));
+                usuario.setSenha(rs.getString("senha"));
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return usuario;
+    }
+    
+    /**
+     * Meotodo que retorna um usuario pelo login e senha
+     * @param username
+     * @param senha
+     * @return 
+     */
+    public Usuario getUsuarioByLogin(String username, String senha){
+        PreparedStatement ps =  null;
+        Conexao conexao =  new Conexao();
+        Usuario usuario = new Usuario();
+        
+        try{
+            ps = conexao.conectar().prepareStatement("SELECT * FROM usuario where cpf = ? and senha = ?");
+            ps.setString(1, username);
+            ps.setString(2, Util.encrypt(senha));
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setCpf(rs.getString("cpf"));
+                usuario.setRg(rs.getString("rg"));
+                usuario.setDataNascimento(rs.getDate("dataNascimento"));
+                usuario.setDataCadastro(rs.getDate("dataCadastro"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNumero(rs.getString("numero"));
+                usuario.setBairro(rs.getString("bairro"));
+                usuario.setCidade(rs.getString("cidade"));
+                usuario.setComplemento(rs.getString("complemento"));
+                usuario.setUf(rs.getString("uf"));
+                usuario.setTelefone(rs.getString("telefone"));
+                usuario.setCelular(rs.getString("celular"));
+                usuario.setIp(rs.getString("ip"));
+                usuario.setTipo(rs.getString("tipo"));
+                usuario.setSexo(rs.getString("sexo"));
+                usuario.setSenha(Util.decrypt(rs.getString("senha")));
+
             }
             
         }catch(Exception e){
@@ -66,49 +155,8 @@ public class UsuarioDAO {
         }finally{
             conexao.desconectar();
         }
-        
+     
         return usuario;
     }
-    
-    
-    public Usuario getUsuarioByCpf(String cpf){
-        Conexao conexao =  new Conexao();
-        CallableStatement cst = null;
-        Usuario usuario = new Usuario();
-        try{
-            cst = conexao.conectar().prepareCall("{call amociclismo.getUsuarioByCpf(?)}");
-            cst.setString(1, cpf);
-            
-            ResultSet rs = cst.executeQuery();
-            usuario.setId(rs.getInt("id"));
-            usuario.setNome(rs.getString("nome"));
-            usuario.setCpf(rs.getString("cpf"));
-            usuario.setRg(rs.getString("rg"));
-            usuario.setDataNascimento(rs.getDate("dataNascimento"));
-            usuario.setDataCadastro(rs.getDate("dataCadastro"));
-            usuario.setEmail(rs.getString("email"));
-            usuario.setNumero(rs.getString("numero"));
-            usuario.setBairro(rs.getString("bairro"));
-            usuario.setCidade(rs.getString("cidade"));
-            usuario.setComplemento(rs.getString("complemento"));
-            usuario.setUf(rs.getString("uf"));
-            usuario.setTelefone(rs.getString("telefone"));
-            usuario.setCelular(rs.getString("celular"));
-            usuario.setIp(rs.getString("ip"));
-            usuario.setTipo(rs.getString("tipo"));
-            usuario.setSexo(rs.getString("sexo"));
-            usuario.setSenha(rs.getString("senha"));
-            
-            
-            
-            
-        }catch(Exception e ){
-            System.out.println("Erro: " + e.getMessage());
-        }finally{
-            conexao.desconectar();
-        }
-        
-        return usuario;
-    }
-    
+
 }

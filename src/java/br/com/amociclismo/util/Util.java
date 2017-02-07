@@ -5,11 +5,15 @@
  */
 package br.com.amociclismo.util;
 
+import br.com.amociclismo.entity.Usuario;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
@@ -33,6 +37,37 @@ public class Util {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(msg, alert));
 
+    }
+    
+     /**
+     * Metodo que remove usuario da sessao
+     */
+    public static void retirarUsuarioSessao(){
+        HttpSession ses = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ses.invalidate();
+    }
+    
+     /**
+     * Metodo que coloca o usuario na sessao
+     * @param usuario 
+     */
+    public static void colocarUsuarioSessao(Usuario usuario){
+        HttpSession ses = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ses.setAttribute("usuarioLogado", usuario);            
+    }
+    
+    
+    /**
+     * Metodo que redireciona pagina
+     * @param url 
+     */
+    public static void redirecionar(String url){
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        try {        
+            ec.redirect(url);
+        } catch (IOException ex) {
+            saveMessage("Erro ao Redirecionar", ex.getMessage());
+        }
     }
 
     /**
@@ -177,5 +212,14 @@ public class Util {
         }
         return ip;
     }
+    
+    
+    /**
+     * Metodo que retorna o usuario logado
+     * @return 
+     */
+    public static Usuario getUsuarioLogado(){
+        return (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
+    }   
 
 }

@@ -10,7 +10,7 @@
     <ui:define name="content" >
         <div class="main" >
             <center>
-                <h:form style="margin-top: -25px;height: 1080px;width: 100%;" >
+                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
 
                     <h:body >
                         <div class="panel panel-info" style="font-size: 11px;margin-top: 8%; width: 85%;"  >
@@ -48,22 +48,24 @@
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="CPF:" style="display: block"/>
-                                        <p:inputMask id="CPF" label="CPF" value="#{usuarioMB.usuario.cpf}" required="true" mask="999.999.999-99" placeholder="000.000.000-00"/>
+                                        <p:inputMask  value="#{usuarioMB.usuario.cpf}"  mask="999.999.999-99" placeholder="000.000.000-00">
+                                            <p:ajax listener="#{usuarioMB.buscarUsuarioNovoByCpf()}" update="formCadastro"/>
+                                        </p:inputMask>
                                     </div>
 
                                     <div class="col-lg-4">
                                         <p:outputLabel value="Nome:" style="display: block"/>
-                                        <p:inputText id="Nome" label="Nome" value="#{usuarioMB.usuario.nome}" required="true" style="width: 86%"/>
+                                        <p:inputText  value="#{usuarioMB.usuario.nome}"  style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="RG:" style="display: block"/>
-                                        <p:inputText id="RG" label="RG" required="true" value="#{usuarioMB.usuario.rg}"/>
+                                        <p:inputText  value="#{usuarioMB.usuario.rg}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Data de Nascimento:" style="display: block"/>
-                                        <p:calendar id="Nascimento" label="Data de Nascimento" required="true" value="#{usuarioMB.usuario.dataNascimento}" showOn="false" mask="99/99/9999" effect="slide" pattern="dd/MM/yyyy" locale="pt" />
+                                        <p:calendar  value="#{usuarioMB.usuario.dataNascimento}" showOn="false" mask="99/99/9999" effect="slide" pattern="dd/MM/yyyy" locale="pt" />
                                     </div>
                                     
                                     <div class="col-lg-2">
@@ -81,7 +83,7 @@
                                 <div class="row" style="margin-top: 1%">
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Senha:" style="display: block"/>
-                                        <p:password required="true" id="Senha" label="Senha" value="#{usuarioMB.usuario.senha}"/>
+                                        <p:password value="#{usuarioMB.usuario.senha}"/>
                                     </div>
                                     
                                     <div class="col-lg-3" style="margin-left: -8.5%">
@@ -96,17 +98,17 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-2">
                                         <p:outputLabel value="CEP:" style="display: block"/>
-                                        <p:inputMask id="CEP" label="CEP" required="true" value="#{usuarioMB.usuario.cep}" mask="99.999-999" style="width: 90%"/>
+                                        <p:inputMask value="#{usuarioMB.usuario.cep}" mask="99.999-999" style="width: 90%"/>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <p:outputLabel value="Endereço:" style="display: block"/>
-                                        <p:inputText id="Endereço" label="Endereço" required="true" value="#{usuarioMB.usuario.endereco}" style="width: 86%"/>
+                                        <p:inputText value="#{usuarioMB.usuario.endereco}" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Número:" style="display: block"/>
-                                        <p:inputMask id="Número" label="Número" required="true" mask="9?9999" value="#{usuarioMB.usuario.numero}"  />
+                                        <p:inputMask  mask="9?9999" value="#{usuarioMB.usuario.numero}"  />
                                     </div>
 
                                     <div class="col-lg-2">
@@ -119,12 +121,12 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Bairro:" style="display: block"/>
-                                        <p:inputText id="Bairro" label="Bairro" required="true" value="#{usuarioMB.usuario.bairro}" style="width: 90%"/>
+                                        <p:inputText  value="#{usuarioMB.usuario.bairro}" style="width: 90%"/>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <p:outputLabel value="Cidade:" style="display: block"/>
-                                        <p:inputText id="Cidade" label="Cidade" required="true" value="#{usuarioMB.usuario.cidade}" style="width: 86%"/>
+                                        <p:inputText  value="#{usuarioMB.usuario.cidade}" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
@@ -168,22 +170,22 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-3">
                                         <p:outputLabel value="E-mail:" style="display: block"/>
-                                        <p:inputText id="E-mail" label="E-mail" required="true" value="#{usuarioMB.usuario.email}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                        <p:inputText  value="#{usuarioMB.usuario.email}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
                                     </div>
                                     
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Confirmar E-mail:" style="display: block"/>
-                                        <p:inputText id="E-mail_Conf" label="E-mail" required="true" value="#{usuarioMB.validaEmail}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                        <p:inputText  value="#{usuarioMB.validaEmail}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
                                     </div>
                                     
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Telefone:" style="display: block"/>
-                                        <p:inputMask id="Telefone" label="Telefone" required="true" mask="(99)9999-9999" value="#{usuarioMB.usuario.telefone}" style="width: 100%" placeholder="(00)0000-0000"/>
+                                        <p:inputMask mask="(99)9999-9999" value="#{usuarioMB.usuario.telefone}" style="width: 100%" placeholder="(00)0000-0000"/>
                                     </div>
                                     
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Celular:" style="display: block"/>
-                                        <p:inputMask id="Celular" label="Celular" required="true" mask="(99)99999-9999" value="#{usuarioMB.usuario.celular}" style="width: 100%" placeholder="(00)00000-0000"/>
+                                        <p:inputMask  mask="(99)99999-9999" value="#{usuarioMB.usuario.celular}" style="width: 100%" placeholder="(00)00000-0000"/>
                                     </div>
 
                                     
