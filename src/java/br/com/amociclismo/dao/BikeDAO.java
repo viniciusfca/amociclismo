@@ -6,6 +6,7 @@
 package br.com.amociclismo.dao;
 
 import br.com.amociclismo.entity.Bike;
+import br.com.amociclismo.entity.Usuario;
 import br.com.amociclismo.util.Conexao;
 import br.com.amociclismo.util.Util;
 import java.sql.CallableStatement;
@@ -129,7 +130,11 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
-                b.setIdUsuario(rs.getInt("idUsuario"));
+                
+                Usuario user = new Usuario();
+                UsuarioDAO usDAO = new UsuarioDAO();
+                user = usDAO.getUsuarioById(rs.getInt("idUsuario"));
+                b.setUsuario(user);
             }
             
             

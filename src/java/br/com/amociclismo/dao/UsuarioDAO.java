@@ -118,6 +118,11 @@ public class UsuarioDAO {
         return usuario;
     }
 
+    /**
+     * Meotodo que retonar um usuario pelo cpf
+     * @param cpf
+     * @return 
+     */
     public Usuario getUsuarioByCpf(String cpf) {
         Conexao conexao = new Conexao();
         CallableStatement cst = null;
@@ -160,6 +165,60 @@ public class UsuarioDAO {
         return usuario;
     }
 
+    /**
+     * Meotodo que retorna um usuario pelo id
+     * @param idUsuario
+     * @return 
+     */
+     public Usuario getUsuarioById(int idUsuario) {
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        Usuario usuario = new Usuario();
+        try {
+            ps = conexao.conectar().prepareStatement("SELECT * FROM Usuario WHERE id = ?");
+            ps.setInt(1, idUsuario);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setCpf(rs.getString("cpf"));
+                usuario.setRg(rs.getString("rg"));
+                usuario.setDataNascimento(rs.getDate("dataNascimento"));
+                usuario.setDataCadastro(rs.getDate("dataCadastro"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setNumero(rs.getString("numero"));
+                usuario.setBairro(rs.getString("bairro"));
+                usuario.setCidade(rs.getString("cidade"));
+                usuario.setComplemento(rs.getString("complemento"));
+                usuario.setCep(rs.getString("cep"));
+                usuario.setEndereco(rs.getString("endereco"));
+                usuario.setUf(rs.getString("uf"));
+                usuario.setTelefone(rs.getString("telefone"));
+                usuario.setCelular(rs.getString("celular"));
+                usuario.setIp(rs.getString("ip"));
+                usuario.setTipo(rs.getString("tipo"));
+                usuario.setSexo(rs.getString("sexo"));
+                usuario.setSenha(rs.getString("senha"));
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return usuario;
+    }
+
+    
+    
+    /**
+     * Meotodo que retorna uma lista de usuarios pelo nome
+     * @param nome
+     * @return 
+     */
     public List<Usuario> getUsuarioByNome(String nome) {
         Conexao conexao = new Conexao();
         PreparedStatement ps = null;

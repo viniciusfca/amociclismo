@@ -82,9 +82,9 @@ public class BikeBean {
     public void bikeByChassi(){
        bike =  bikeDAO.getBikeByChassi(bike.getChassi());
        
-       if(bike.getId() > 0 && bike.getIdUsuario() == Util.getUsuarioLogado().getId()){
+       if(bike.getId() > 0 && bike.getUsuario().getId() == Util.getUsuarioLogado().getId()){
            Util.saveMessage("Atenção", "Você já cadastrou essa bicicleta.");
-       }else if(bike.getId() > 0 && bike.getIdUsuario() != Util.getUsuarioLogado().getId()){
+       }else if(bike.getId() > 0 && bike.getUsuario().getId() != Util.getUsuarioLogado().getId()){
            Util.saveMessage("Atenção", "Essa bicicleta já está cadastrada para outro usuário.");
            bike = new Bike();
        }

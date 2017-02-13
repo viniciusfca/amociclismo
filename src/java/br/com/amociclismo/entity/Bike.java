@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Bike {
     private int id;
-    private int idUsuario;
+    private Usuario usuario;
     private String chassi;
     private String marca;
     private String modelo;
@@ -33,11 +33,6 @@ public class Bike {
     public void setBoletins(List<Boletim> boletins) {
         this.boletins = boletins;
     }
-
-   
-    
-    
-    
     
     public int getId() {
         return id;
@@ -47,12 +42,12 @@ public class Bike {
         this.id = id;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public String getChassi() {
