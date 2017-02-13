@@ -20,16 +20,17 @@ import java.util.List;
  * @author Vinicius
  */
 public class BikeDAO {
-    
+
     /**
      * Metodo que insere uma nova bicicleta
-     * @param bike 
+     *
+     * @param bike
      */
-    public Bike inserirBike(Bike bike){
+    public Bike inserirBike(Bike bike) {
         Conexao conexao = new Conexao();
         CallableStatement cst;
-        
-        try{
+
+        try {
             cst = conexao.conectar().prepareCall("{call amociclismo.iBike(?,?,?,?,?,?,?,?,?,?)}");
             cst.setInt(1, Util.getUsuarioLogado().getId());
             cst.setString(2, bike.getChassi());
@@ -41,43 +42,46 @@ public class BikeDAO {
             cst.setString(8, bike.getObservacao());
             cst.setString(9, bike.getLocalCompra());
             cst.setString(10, bike.getNotaFiscal());
-            
+
             cst.execute();
-            
+
             PreparedStatement ps = conexao.conectar().prepareStatement("SELECT id FROM bike WHERE idUsuario = ? ORDER BY dataCadastro desc");
             ps.setInt(1, Util.getUsuarioLogado().getId());
             ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
+
+            if (rs.next()) {
                 bike.setId(rs.getInt("id"));
             }
-            
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
-        }finally{
+        } finally {
             conexao.desconectar();
         }
-        
+
         return bike;
     }
-    
+
     /**
      * Metodo que retorna uma lista de bikes pelo id do Usuario logado.
+     *
      * @param idUsuario
-     * @return 
+     * @return
      */
-    public List<Bike> getBikesByIdUsuario(int idUsuario){
+    public List<Bike> getBikesByIdUsuario(int idUsuario) {
         Conexao conexao = new Conexao();
         List<Bike> bikes = new ArrayList<Bike>();
         PreparedStatement ps = null;
-        
-        try{
+
+        try {
             ps = conexao.conectar().prepareStatement("SELECT * FROM Bike WHERE idUsuario = ? ORDER BY id desc");
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
+
+            Usuario user = new Usuario();
+            UsuarioDAO usDAO = new UsuarioDAO();
+            user = usDAO.getUsuarioById(idUsuario);
+            while (rs.next()) {
                 Bike b = new Bike();
                 b.setId(rs.getInt("id"));
                 b.setAro(rs.getString("aro"));
@@ -89,37 +93,37 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
-                
+                //b.setUsuario(user);
                 bikes.add(b);
             }
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
-        }finally{
+        } finally {
             conexao.desconectar();
         }
-        
+
         return bikes;
-        
+
     }
-    
+
     /**
-     * 
+     *
      * @param chassi
-     * @return 
+     * @return
      */
-    public Bike getBikeByChassi(String chassi){
+    public Bike getBikeByChassi(String chassi) {
         Conexao conexao = new Conexao();
-        PreparedStatement ps =  null;
+        PreparedStatement ps = null;
         Bike b = new Bike();
-        try{
+        try {
             ps = conexao.conectar().prepareStatement("SELECT * FROM Bike WHERE chassi = ?");
             ps.setString(1, chassi);
-            
+
             ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
-                
+
+            if (rs.next()) {
+
                 b.setId(rs.getInt("id"));
                 b.setAro(rs.getString("aro"));
                 b.setChassi(rs.getString("chassi"));
@@ -130,21 +134,65 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
-                
+
                 Usuario user = new Usuario();
                 UsuarioDAO usDAO = new UsuarioDAO();
                 user = usDAO.getUsuarioById(rs.getInt("idUsuario"));
                 b.setUsuario(user);
             }
-            
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
-        }finally{
+        } finally {
+            conexao.desconectar();
+        }
+
+        return b;
+    }
+
+    /**
+     * Retorna uma lista de bikes pela pesquisa
+     *
+     * @param valorPesquisa
+     * @return
+     */
+    public List<Bike> listarBike(String valorPesquisa) {
+        String sql = "SELECT * FROM Bike WHERE ";
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        List<Bike> bikes = new ArrayList<Bike>();
+        try {
+            ps = conexao.conectar().prepareStatement(sql + valorPesquisa);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Usuario user = new Usuario();
+                UsuarioDAO usDAO = new UsuarioDAO();
+                user = usDAO.getUsuarioById(rs.getInt("idUsuario"));
+                
+                Bike b = new Bike();
+                b.setId(rs.getInt("id"));
+                b.setAro(rs.getString("aro"));
+                b.setChassi(rs.getString("chassi"));
+                b.setCores(rs.getString("cores"));
+                b.setMarca(rs.getString("marca"));
+                b.setModelo(rs.getString("modelo"));
+                b.setNotaFiscal(rs.getString("notafiscal"));
+                b.setLocalCompra(rs.getString("localcompra"));
+                b.setObservacao(rs.getString("observacao"));
+                b.setVelocidades(rs.getString("velocidade"));
+                b.setUsuario(user);
+                bikes.add(b);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
             conexao.desconectar();
         }
         
-        return b;
+        return bikes;
     }
-    
+
 }
