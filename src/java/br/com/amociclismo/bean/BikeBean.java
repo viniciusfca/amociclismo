@@ -14,97 +14,99 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author Vinicius
  */
-
-@ManagedBean(name="bikeMB")
+@ManagedBean(name = "bikeMB")
 @ViewScoped
 public class BikeBean {
-    
+
     private Bike bike;
     private Boletim boletim;
-    
+
     private BikeDAO bikeDAO;
     private BoletimDAO boletimDAO;
-    
+
     private int idBike = 0;
-    
+
     private boolean habilitarBO = true;
-    
+
     private List<Boletim> boletins;
-    private List<Bike> bikes; 
-    
-    
+    private List<Bike> bikes;
+
     /**
      * Construtor
      */
     public BikeBean() {
         bikeDAO = new BikeDAO();
         boletimDAO = new BoletimDAO();
-        
+
         bike = new Bike();
-        boletim =  new Boletim();
-        
-        boletins =  new ArrayList<Boletim>();
+        boletim = new Boletim();
+
+        boletins = new ArrayList<Boletim>();
         bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
     }
-    
+
     /**
      * Metodo que salva uma nova bicicleta
      */
-    public void salvarBike(){
-        
+    public void salvarBike() {
+
         bike = bikeDAO.inserirBike(bike);
-        
-        if(bike.getId() > 0){
+
+        if (bike.getId() > 0) {
             Util.saveMessage("Sucesso!", "Bicicleta cadastra com sucesso.");
+            bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
             habilitarBO = false;
             boletins = boletimDAO.getListaBoletim(bike.getId());
-            
+
         }
     }
-    
+
     /**
      * Novo cadastro
      */
-    public void novoCadastro(){
+    public void novoCadastro() {
         habilitarBO = true;
         bike = new Bike();
         boletins.clear();
     }
-    
+
     /**
      * Metodo que retorna a bike pelo chassi
      */
-    public void bikeByChassi(){
-       bike =  bikeDAO.getBikeByChassi(bike.getChassi());
-       
-       if(bike.getId() > 0 && bike.getUsuario().getId() == Util.getUsuarioLogado().getId()){
-           Util.saveMessage("Atenção", "Você já cadastrou essa bicicleta.");
-       }else if(bike.getId() > 0 && bike.getUsuario().getId() != Util.getUsuarioLogado().getId()){
-           Util.saveMessage("Atenção", "Essa bicicleta já está cadastrada para outro usuário.");
-           bike = new Bike();
-       }
-       
+    public void bikeByChassi() {
+        String chassi = bike.getChassi();
+        bike = bikeDAO.getBikeByChassi(bike.getChassi());
+
+        if (bike.getId() > 0 && bike.getUsuario().getId() == Util.getUsuarioLogado().getId()) {
+            Util.saveMessage("Atenção", "Você já cadastrou essa bicicleta.");
+        } else if (bike.getId() > 0 && bike.getUsuario().getId() != Util.getUsuarioLogado().getId()) {
+            Util.saveMessage("Atenção", "Essa bicicleta já está cadastrada para outro usuário.");
+            bike = new Bike();
+        } else {
+            bike.setChassi(chassi);
+        }
+
     }
-    
+
     /**
      * Metodo que salva boletim
      */
-    public void salvarBoletim(){
+    public void salvarBoletim() {
         boletim = boletimDAO.inserirBoletim(boletim, bike.getId());
-        
-        if(boletim.getId() > 0){
+
+        if (boletim.getId() > 0) {
             Util.saveMessage("Sucesso!", "Boletim cadastrado com sucesso!");
             boletins = boletimDAO.getListaBoletim(bike.getId());
-        }else{
+        } else {
             Util.saveMessage("Atenção!", "Falha ao cadastrar boletim!");
         }
-        
-        
+
     }
 
     public Bike getBike() {
@@ -139,6 +141,8 @@ public class BikeBean {
 
     public void setBoletim(Boletim boletim) {
         this.boletim = boletim;
+        RequestContext.getCurrentInstance().update("formCadastro:dlgBoletim");
+        RequestContext.getCurrentInstance().execute("PF('dlgBoletim').show()");
     }
 
     public int getIdBike() {
@@ -147,7 +151,7 @@ public class BikeBean {
 
     public void setIdBike(int idBike) {
         this.idBike = idBike;
-        
+
     }
 
     public List<Bike> getBikes() {
@@ -157,8 +161,5 @@ public class BikeBean {
     public void setBikes(List<Bike> bikes) {
         this.bikes = bikes;
     }
-    
-    
-    
-    
+
 }

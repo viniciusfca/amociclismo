@@ -10,6 +10,7 @@ import br.com.amociclismo.entity.Usuario;
 import br.com.amociclismo.util.Util;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -81,7 +82,7 @@ public class UsuarioBean {
 
         if (userAux.getId() > 0) {
             msg += "O CPF informado já está cadastrado na nossa base.";
-             Util.saveMessage("Atenção", "O CPF informado já está cadastrado na nossa base.");
+            Util.saveMessage("Atenção", "O CPF informado já está cadastrado na nossa base.");
         }
 
         return msg;
@@ -90,14 +91,16 @@ public class UsuarioBean {
     /**
      * Metodo que salva usuario
      */
-    public void salvarUsuario() {
+    public void salvarUsuario() throws InterruptedException {
         String msg = validarCampos();
         if (msg.equals("")) {
             usuario = usuarioDAO.inserirUsuario(usuario);
-        } 
+        }
 
         if (usuario.getId() > 0 && msg.equals("")) {
             Util.saveMessage("Sucesso!", "Cadastro efetuado com sucesso.");
+            Util.redirecionar(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.jsf");
+
         } else {
             Util.saveMessage("Atenção", "Falha ao efetuar cadastro.");
         }

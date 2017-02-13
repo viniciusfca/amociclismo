@@ -29,28 +29,49 @@ public class BikeDAO {
     public Bike inserirBike(Bike bike) {
         Conexao conexao = new Conexao();
         CallableStatement cst;
+        PreparedStatement psUpdate = null;
+        String update = "UPDATE Bike  SET chassi = ?, marca = ?, modelo = ?, cores = ?, aro = ?, velocidade = ?, observacao = ?, localCompra = ?, notaFiscal = ? WHERE id = ?";
 
         try {
-            cst = conexao.conectar().prepareCall("{call amociclismo.iBike(?,?,?,?,?,?,?,?,?,?)}");
-            cst.setInt(1, Util.getUsuarioLogado().getId());
-            cst.setString(2, bike.getChassi());
-            cst.setString(3, bike.getMarca());
-            cst.setString(4, bike.getModelo());
-            cst.setString(5, bike.getCores());
-            cst.setString(6, bike.getAro());
-            cst.setString(7, bike.getVelocidades());
-            cst.setString(8, bike.getObservacao());
-            cst.setString(9, bike.getLocalCompra());
-            cst.setString(10, bike.getNotaFiscal());
 
-            cst.execute();
+            if (bike.getId() < 1) {
+                cst = conexao.conectar().prepareCall("{call amociclismo.iBike(?,?,?,?,?,?,?,?,?,?)}");
+                cst.setInt(1, Util.getUsuarioLogado().getId());
+                cst.setString(2, bike.getChassi());
+                cst.setString(3, bike.getMarca());
+                cst.setString(4, bike.getModelo());
+                cst.setString(5, bike.getCores());
+                cst.setString(6, bike.getAro());
+                cst.setString(7, bike.getVelocidades());
+                cst.setString(8, bike.getObservacao());
+                cst.setString(9, bike.getLocalCompra());
+                cst.setString(10, bike.getNotaFiscal());
 
-            PreparedStatement ps = conexao.conectar().prepareStatement("SELECT id FROM bike WHERE idUsuario = ? ORDER BY dataCadastro desc");
-            ps.setInt(1, Util.getUsuarioLogado().getId());
-            ResultSet rs = ps.executeQuery();
+                cst.execute();
 
-            if (rs.next()) {
-                bike.setId(rs.getInt("id"));
+                PreparedStatement ps = conexao.conectar().prepareStatement("SELECT id FROM bike WHERE idUsuario = ? ORDER BY dataCadastro desc");
+                ps.setInt(1, Util.getUsuarioLogado().getId());
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    bike.setId(rs.getInt("id"));
+
+                }
+            } else {
+                psUpdate = conexao.conectar().prepareStatement(update);
+
+                psUpdate.setString(1, bike.getChassi());
+                psUpdate.setString(2, bike.getMarca());
+                psUpdate.setString(3, bike.getModelo());
+                psUpdate.setString(4, bike.getCores());
+                psUpdate.setString(5, bike.getAro());
+                psUpdate.setString(6, bike.getVelocidades());
+                psUpdate.setString(7, bike.getObservacao());
+                psUpdate.setString(8, bike.getLocalCompra());
+                psUpdate.setString(9, bike.getNotaFiscal());
+                psUpdate.setInt(10, bike.getId());
+
+                psUpdate.executeUpdate();
             }
 
         } catch (Exception e) {
@@ -93,7 +114,7 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
-                //b.setUsuario(user);
+                b.setUsuario(user);
                 bikes.add(b);
             }
 
@@ -170,7 +191,7 @@ public class BikeDAO {
                 Usuario user = new Usuario();
                 UsuarioDAO usDAO = new UsuarioDAO();
                 user = usDAO.getUsuarioById(rs.getInt("idUsuario"));
-                
+
                 Bike b = new Bike();
                 b.setId(rs.getInt("id"));
                 b.setAro(rs.getString("aro"));
@@ -191,7 +212,7 @@ public class BikeDAO {
         } finally {
             conexao.desconectar();
         }
-        
+
         return bikes;
     }
 

@@ -27,12 +27,12 @@
                                     <div class="col-lg-12">
                                         <div class="row">
 
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu"  value="Novo"/>
-                                            </div>
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Procurar"/>
-                                            </div>
+                                            <!--                                            <div class="col-lg-2">
+                                                                                            <p:commandButton styleClass="btn-menu"  value="Novo"/>
+                                                                                        </div>
+                                                                                        <div class="col-lg-2">
+                                                                                            <p:commandButton styleClass="btn-menu" value="Procurar"/>
+                                                                                        </div>-->
                                         </div>
 
                                     </div>
@@ -75,28 +75,6 @@
 
                                         <p:commandButton action="#{bikeMB.salvarBoletim()}"  icon="ui-icon-plus" style="margin-left: -80%;width: 145px; height: 27px" update="formCadastro" value="Adicionar boletim"/>
 
-                                        <p:dataTable id="dtBoletim" value="#{bikeMB.boletins}" var="bo" style="margin-top: 1%;text-align: center" emptyMessage="Nenhum boletim cadastrado.">
-                                            <f:facet  name="header">
-                                                Boletins
-                                            </f:facet>
-
-                                            <p:column width="45" headerText="Editar">
-                                                <p:commandButton action="#{bikeMB.setBoletim(bo)}" style="width: 30px;width: 30px" icon="ui-icon-check" />
-                                            </p:column>
-
-                                            <p:column headerText="Data da ocorrência">
-                                                <p:outputLabel value="#{bo.data}" />
-                                            </p:column>
-
-                                            <p:column headerText="Número do Boletim">
-                                                <p:outputLabel value="#{bo.numero}"/>
-                                            </p:column>
-
-                                            <p:column headerText="Número do Boletim">
-                                                <p:outputLabel value="#{bo.status}"/>
-                                            </p:column>
-
-                                        </p:dataTable>
                                     </div>
                                 </div>
 
@@ -128,9 +106,9 @@
                                                 <p:commandButton styleClass="btn-menu" value="Novo" action="#{bikeMB.novoCadastro()}" update="formCadastro"/>
                                             </div>
 
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Pesquisar"/>
-                                            </div>
+                                            <!--                                            <div class="col-lg-2">
+                                                                                            <p:commandButton styleClass="btn-menu" value="Pesquisar"/>
+                                                                                        </div>-->
 
                                         </div>
 
@@ -205,8 +183,11 @@
                                     <f:facet name="header">
                                         Boletins de Ocorrência
                                     </f:facet>
-                                    
-                                   
+
+
+                                    <p:column width="45" headerText="Editar">
+                                        <p:commandButton action="#{bikeMB.setBoletim(b)}" style="width: 30px;width: 30px" icon="ui-icon-check" />
+                                    </p:column>
 
                                     <p:column  style="width: 100px" headerText="Data do Furto">
                                         <p:outputLabel value="#{b.data}">
@@ -222,7 +203,7 @@
                                         <p:outputLabel value="#{b.observacao}"/>
                                     </p:column>
 
-                                    <p:column style="width: 60px" headerText="Status">
+                                    <p:column style="width: 80px" headerText="Status">
                                         <p:outputLabel value="#{b.status}"/>
                                     </p:column>
                                 </p:dataTable>
@@ -233,7 +214,7 @@
                                     <f:facet name="header">
                                         Minhas bicicletas
                                     </f:facet>
-                                    
+
                                     <p:column style="width: 50px"  headerText="">
                                         <p:commandButton icon="ui-icon-check" action="#{bikeMB.setBike(bike)}" update="formCadastro"/>
                                     </p:column>

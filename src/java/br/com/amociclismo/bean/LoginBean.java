@@ -74,7 +74,7 @@ public class LoginBean {
              mostrarErro = false;
              erroLogar = "";
          }else{
-             erroLogar = "Usuário ou senha incorreto.";
+             erroLogar = "Usuário ou senha incorreta.";
              mostrarErro = true;
              Util.redirecionar(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.jsf");
          }

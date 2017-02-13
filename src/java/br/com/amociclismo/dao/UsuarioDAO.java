@@ -50,7 +50,7 @@ public class UsuarioDAO {
             cst.setString(14, usuario.getCidade());
             cst.setString(15, usuario.getUf());
             cst.setString(16, Util.encrypt(usuario.getSenha()));
-            cst.setString(17, "P");
+            cst.setString(17, "C");
             cst.setString(18, Util.getIp());
 
             cst.execute();
