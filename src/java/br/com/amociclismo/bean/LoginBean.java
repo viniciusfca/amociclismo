@@ -19,7 +19,6 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "loginMB")
 @SessionScoped
-@ViewScoped
 public class LoginBean {
     
     private String username;
@@ -32,8 +31,8 @@ public class LoginBean {
      * Construtor
      */
     public LoginBean() {
-        this.username = "";
-        this.senha = "";
+//        this.username = "";
+//        this.senha = "";
         erroLogar = "";
         
         String tUser = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
@@ -63,12 +62,17 @@ public class LoginBean {
     public void doLogin(){
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         
+        username = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
+        senha = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("pass");
+        
         try{
          Usuario usuario  = usuarioDAO.getUsuarioByLogin(username, senha);
          
          if(usuario.getId() > 0){
              Util.colocarUsuarioSessao(usuario);
              Util.redirecionar(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/restrito/principal.jsf");
+             mostrarErro = false;
+             erroLogar = "";
          }else{
              erroLogar = "Usuário ou senha incorreto.";
              mostrarErro = true;
