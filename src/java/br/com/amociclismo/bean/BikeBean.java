@@ -35,6 +35,7 @@ public class BikeBean {
     private boolean habilitarBO = true;
     
     private List<Boletim> boletins;
+    private List<Bike> bikes; 
     
     
     /**
@@ -48,6 +49,7 @@ public class BikeBean {
         boletim =  new Boletim();
         
         boletins =  new ArrayList<Boletim>();
+        bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
     }
     
     /**
@@ -63,6 +65,30 @@ public class BikeBean {
             boletins = boletimDAO.getListaBoletim(bike.getId());
             
         }
+    }
+    
+    /**
+     * Novo cadastro
+     */
+    public void novoCadastro(){
+        habilitarBO = true;
+        bike = new Bike();
+        boletins.clear();
+    }
+    
+    /**
+     * Metodo que retorna a bike pelo chassi
+     */
+    public void bikeByChassi(){
+       bike =  bikeDAO.getBikeByChassi(bike.getChassi());
+       
+       if(bike.getId() > 0 && bike.getIdUsuario() == Util.getUsuarioLogado().getId()){
+           Util.saveMessage("Atenção", "Você já cadastrou essa bicicleta.");
+       }else if(bike.getId() > 0 && bike.getIdUsuario() != Util.getUsuarioLogado().getId()){
+           Util.saveMessage("Atenção", "Essa bicicleta já está cadastrada para outro usuário.");
+           bike = new Bike();
+       }
+       
     }
     
     /**
@@ -87,6 +113,8 @@ public class BikeBean {
 
     public void setBike(Bike bike) {
         this.bike = bike;
+        habilitarBO = false;
+        boletins = boletimDAO.getListaBoletim(bike.getId());
     }
 
     public boolean isHabilitarBO() {
@@ -119,6 +147,15 @@ public class BikeBean {
 
     public void setIdBike(int idBike) {
         this.idBike = idBike;
+        
+    }
+
+    public List<Bike> getBikes() {
+        return bikes;
+    }
+
+    public void setBikes(List<Bike> bikes) {
+        this.bikes = bikes;
     }
     
     

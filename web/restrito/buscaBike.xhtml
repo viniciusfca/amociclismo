@@ -12,10 +12,10 @@
             <center>
                 <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
 
-                    <p:dialog resizable="false" id="dlgBoletim" widgetVar="dlgBoletim" width="800" >
+                    <p:dialog resizable="false" id="dlgBuscaUsuario" widgetVar="dlgBuscaUsuario" width="800" >
                         <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
                             <div class="panel-heading" >
-                                <b>CADASTRAR BOLETIM</b>
+                                <b>BUSCAR USUÁRIO</b>
                             </div>
 
                             <div class="panel" style="height: 10px;">
@@ -28,10 +28,20 @@
                                         <div class="row">
 
                                             <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu"  value="Novo"/>
+                                                <p:selectOneMenu style="width: 70%" value="#{buscaUsuarioMB.tipoPesquisa}">
+                                                    <f:selectItem itemValue="1" itemLabel="Chassi"/>
+                                                    <f:selectItem itemValue="2" itemLabel="Cor"/>
+                                                    <f:selectItem itemValue="2" itemLabel="Marca"/>
+                                                    <f:selectItem itemValue="3" itemLabel="CPF do proprietário"/>
+                                                </p:selectOneMenu>
                                             </div>
-                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Procurar"/>
+
+                                            <div class="col-lg-5">
+                                                <p:inputText style="width: 100%" placeholder="Pesquisar" value="#{buscaUsuarioMB.valorPesquisa}"/>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <p:commandButton styleClass="btn-menu" value="Pesquisar"  action="#{buscaUsuarioMB.buscarUsuario()}" update=":formCadastro:dtUsuarios"/>
                                             </div>
                                         </div>
 
@@ -41,59 +51,34 @@
 
                                 <p:separator/>
 
-                                <div class="row" style="text-align: left">
-
-                                    <div class="col-lg-2">
-                                        <p:outputLabel  value="Data da ocorrência:" style="display: block"/>
-                                        <p:calendar  value="#{bikeMB.boletim.data}"  showOn="false" mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt" />
-                                    </div>
-
-                                    <div class="col-lg-2" style="margin-left: 7%">
-                                        <p:outputLabel value="Número do Boletim:" style="display: block"/>
-                                        <p:inputText value="#{bikeMB.boletim.numero}" />
-                                    </div>
-
-                                    <div class="col-lg-1" style="margin-left: 7%">
-                                        <p:outputLabel value="Status:" style="display: block"/>
-                                        <p:selectOneMenu style="margin-top: 49%" value="#{bikeMB.boletim.status}">
-                                            <f:selectItem itemLabel="Furtada" itemValue="F"/>
-                                            <f:selectItem itemLabel="Recuperada" itemValue="R"/>
-                                        </p:selectOneMenu>
-                                    </div>
-
-                                    <div class="col-lg-4" style="margin-left: 7%">
-                                        <p:outputLabel value="Observação:" style="display: block"/>
-                                        <p:inputTextarea value="#{bikeMB.boletim.observacao}" style="margin-top: 5%;width: 100%"/>
-                                    </div>
-
-
-
-                                </div>
-
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-12">
 
-                                        <p:commandButton action="#{bikeMB.salvarBoletim()}"  icon="ui-icon-plus" style="margin-left: -80%;width: 145px; height: 27px" update="formCadastro" value="Adicionar boletim"/>
-
-                                        <p:dataTable id="dtBoletim" value="#{bikeMB.boletins}" var="bo" style="margin-top: 1%;text-align: center" emptyMessage="Nenhum boletim cadastrado.">
+                                        <p:dataTable id="dtUsuarios" value="#{buscaUsuarioMB.usuarios}" var="user" style="margin-top: 1%;text-align: center" emptyMessage="Nenhum usuário encontrado.">
                                             <f:facet  name="header">
-                                                Boletins
+                                                Usuários
                                             </f:facet>
 
                                             <p:column width="45" headerText="Editar">
-                                                <p:commandButton action="#{bikeMB.setBoletim(bo)}" style="width: 30px;width: 30px" icon="ui-icon-check" />
+                                                <p:commandButton action="#{buscaUsuarioMB.setUsuario(user)}" update="formCadastro" style="width: 30px;width: 30px" icon="ui-icon-check" />
                                             </p:column>
 
-                                            <p:column headerText="Data da ocorrência">
-                                                <p:outputLabel value="#{bo.data}" />
+                                            <p:column headerText="CPF">
+                                                <p:outputLabel value="#{user.cpf}" />
                                             </p:column>
 
-                                            <p:column headerText="Número do Boletim">
-                                                <p:outputLabel value="#{bo.numero}"/>
+                                            <p:column headerText="Nome">
+                                                <p:outputLabel value="#{user.nome}"/>
                                             </p:column>
 
-                                            <p:column headerText="Número do Boletim">
-                                                <p:outputLabel value="#{bo.status}"/>
+                                            <p:column headerText="E-mail">
+                                                <p:outputLabel value="#{user.email}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Data Cadastro">
+                                                <p:outputLabel value="#{user.dataCadastro}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                </p:outputLabel>
                                             </p:column>
 
                                         </p:dataTable>
@@ -227,38 +212,7 @@
                                     </p:column>
                                 </p:dataTable>
 
-                                <p:separator/>
-
-                                <p:dataTable value="#{bikeMB.bikes}" style="text-align: center" var="bike">
-                                    <f:facet name="header">
-                                        Minhas bicicletas
-                                    </f:facet>
-                                    
-                                    <p:column style="width: 50px"  headerText="">
-                                        <p:commandButton icon="ui-icon-check" action="#{bikeMB.setBike(bike)}" update="formCadastro"/>
-                                    </p:column>
-
-                                    <p:column headerText="Chassi">
-                                        <p:outputLabel value="#{bike.chassi}"/>
-                                    </p:column>
-
-                                    <p:column headerText="Marca">
-                                        <p:outputLabel value="#{bike.marca}"/>
-                                    </p:column>
-
-                                    <p:column headerText="Cores">
-                                        <p:outputLabel value="#{bike.cores}"/>
-                                    </p:column>
-
-                                    <p:column headerText="Aro">
-                                        <p:outputLabel value="#{bike.aro}"/>
-                                    </p:column>
-
-
-                                </p:dataTable>
-
-
-
+                                
                             </div>
                         </div>
                     </h:body>

@@ -11,6 +11,8 @@ import br.com.amociclismo.util.Util;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -57,6 +59,87 @@ public class BikeDAO {
         }
         
         return bike;
+    }
+    
+    /**
+     * Metodo que retorna uma lista de bikes pelo id do Usuario logado.
+     * @param idUsuario
+     * @return 
+     */
+    public List<Bike> getBikesByIdUsuario(int idUsuario){
+        Conexao conexao = new Conexao();
+        List<Bike> bikes = new ArrayList<Bike>();
+        PreparedStatement ps = null;
+        
+        try{
+            ps = conexao.conectar().prepareStatement("SELECT * FROM Bike WHERE idUsuario = ? ORDER BY id desc");
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                Bike b = new Bike();
+                b.setId(rs.getInt("id"));
+                b.setAro(rs.getString("aro"));
+                b.setChassi(rs.getString("chassi"));
+                b.setCores(rs.getString("cores"));
+                b.setMarca(rs.getString("marca"));
+                b.setModelo(rs.getString("modelo"));
+                b.setNotaFiscal(rs.getString("notafiscal"));
+                b.setLocalCompra(rs.getString("localcompra"));
+                b.setObservacao(rs.getString("observacao"));
+                b.setVelocidades(rs.getString("velocidade"));
+                
+                bikes.add(b);
+            }
+            
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+        
+        return bikes;
+        
+    }
+    
+    /**
+     * 
+     * @param chassi
+     * @return 
+     */
+    public Bike getBikeByChassi(String chassi){
+        Conexao conexao = new Conexao();
+        PreparedStatement ps =  null;
+        Bike b = new Bike();
+        try{
+            ps = conexao.conectar().prepareStatement("SELECT * FROM Bike WHERE chassi = ?");
+            ps.setString(1, chassi);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                
+                b.setId(rs.getInt("id"));
+                b.setAro(rs.getString("aro"));
+                b.setChassi(rs.getString("chassi"));
+                b.setCores(rs.getString("cores"));
+                b.setMarca(rs.getString("marca"));
+                b.setModelo(rs.getString("modelo"));
+                b.setNotaFiscal(rs.getString("notafiscal"));
+                b.setLocalCompra(rs.getString("localcompra"));
+                b.setObservacao(rs.getString("observacao"));
+                b.setVelocidades(rs.getString("velocidade"));
+                b.setIdUsuario(rs.getInt("idUsuario"));
+            }
+            
+            
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+        
+        return b;
     }
     
 }

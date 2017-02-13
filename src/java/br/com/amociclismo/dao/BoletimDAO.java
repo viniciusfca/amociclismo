@@ -79,7 +79,13 @@ public class BoletimDAO {
                 bo.setId(rs.getInt("id"));
                 bo.setData(rs.getDate("data"));
                 bo.setIdBike(rs.getInt("idBike"));
-                bo.setStatus(rs.getString("status"));
+                
+                if(rs.getString("status").equals("F")){
+                    bo.setStatus("Furtada");
+                }else{
+                    bo.setStatus("Recuperada");
+                }
+                
                 bo.setObservacao(rs.getString("observacao"));
                 bo.setNumero(rs.getString("numero"));
                 

@@ -1,0 +1,269 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  template="/template.xhtml"
+                 xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content" >
+        <div class="main" >
+            <center>
+
+                <h:form id="formCadastro" style="margin-top: -90px;height: 1080px;width: 100%;" >
+
+                    <p:dialog resizable="false" id="dlgBuscaUsuario" widgetVar="dlgBuscaUsuario" width="800" >
+                        <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
+                            <div class="panel-heading" >
+                                <b>BUSCAR USUÁRIO</b>
+                            </div>
+
+                            <div class="panel" style="height: 10px;">
+                            </div>
+
+                            <div class="panel-body" style="margin-top: -1.3%">
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+
+                                            <div class="col-lg-2">
+                                                <p:selectOneMenu style="width: 70%" value="#{buscaUsuarioMB.tipoPesquisa}">
+                                                    <f:selectItem itemValue="1" itemLabel="CPF"/>
+                                                    <f:selectItem itemValue="2" itemLabel="Nome"/>
+                                                </p:selectOneMenu>
+                                            </div>
+
+                                            <div class="col-lg-5">
+                                                <p:inputText style="width: 100%" placeholder="Pesquisar" value="#{buscaUsuarioMB.valorPesquisa}"/>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <p:commandButton styleClass="btn-menu" value="Pesquisar"  action="#{buscaUsuarioMB.buscarUsuario()}" update=":formCadastro:dtUsuarios"/>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <p:separator/>
+
+                                <div class="row" style="margin-top: 1%">       
+                                    <div class="col-lg-12">
+
+                                        <p:dataTable id="dtUsuarios" value="#{buscaUsuarioMB.usuarios}" var="user" style="margin-top: 1%;text-align: center" emptyMessage="Nenhum usuário encontrado.">
+                                            <f:facet  name="header">
+                                                Usuários
+                                            </f:facet>
+
+                                            <p:column width="45" headerText="Editar">
+                                                <p:commandButton action="#{buscaUsuarioMB.setUsuario(user)}" update="formCadastro" style="width: 30px;width: 30px" icon="ui-icon-check" />
+                                            </p:column>
+
+                                            <p:column headerText="CPF">
+                                                <p:outputLabel value="#{user.cpf}" />
+                                            </p:column>
+
+                                            <p:column headerText="Nome">
+                                                <p:outputLabel value="#{user.nome}"/>
+                                            </p:column>
+
+                                            <p:column headerText="E-mail">
+                                                <p:outputLabel value="#{user.email}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Data Cadastro">
+                                                <p:outputLabel value="#{user.dataCadastro}">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                </p:outputLabel>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </p:dialog>
+
+                    <h:body >
+                        <div class="panel panel-info" style="font-size: 11px;margin-top: 8%; width: 85%;"  >
+                            <div style="text-align: left" class="panel-heading" >
+                                <b>DADOS DE USUÁRIO</b>
+                            </div>
+
+                            <div class="panel" style="height: 10px;">
+                            </div>
+
+
+                            <div class="panel-body" style="margin-top: -1.3%; text-align: left">
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <div class="row">
+
+                                            <div class="col-lg-2">
+                                                <p:commandButton styleClass="btn-menu" onclick="PF('dlgBuscaUsuario').show()" value="Pesquisar"/>
+                                            </div>
+
+                                            <div class="col-lg-2">
+                                                <p:commandButton styleClass="btn-menu" action="#{buscaUsuarioMB.salvarUsuario()}" disabled="#{buscaUsuarioMB.habilitarSalvar}" update="formCadastro" value="Salvar"/>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <p:separator/>
+
+                                <div class="row" style="margin-top: 1%">
+
+
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="CPF:" style="display: block"/>
+                                        <p:inputMask readonly="true" value="#{buscaUsuarioMB.usuario.cpf}"  mask="999.999.999-99" placeholder="000.000.000-00">
+                                            
+                                        </p:inputMask>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Nome:" style="display: block"/>
+                                        <p:inputText  readonly="true" value="#{buscaUsuarioMB.usuario.nome}"  style="width: 86%"/>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="RG:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.rg}"/>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="Data de Nascimento:" style="display: block"/>
+                                        <p:calendar readonly="true" value="#{buscaUsuarioMB.usuario.dataNascimento}" showOn="false" mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt" />
+                                    </div>
+
+                                    <div class="col-lg-1" >
+                                        <p:outputLabel value="Sexo:" style="display: block"/>
+                                        <p:inputText readonly="true" style="width: 50%" value="#{buscaUsuarioMB.usuario.sexo}"/>
+                                            
+                                    </div>
+                                    
+                                    <div class="col-lg-1" style="margin-left: -4%">
+                                        <p:outputLabel value="Tipo:" style="display: block"/>
+                                        <p:selectOneMenu  value="#{buscaUsuarioMB.usuario.tipo}">
+                                            <f:selectItem  itemLabel="Policial" itemValue="P"/>
+                                            <f:selectItem itemLabel="Ciclista" itemValue="C"/>
+                                            <f:selectItem itemLabel="Administrador" itemValue="A"/>
+                                        </p:selectOneMenu>
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <p:separator title="Dados de Endereço"/>
+
+                                <div class="row" style="margin-top: 1%">       
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="CEP:" style="display: block"/>
+                                        <p:inputMask readonly="true" value="#{buscaUsuarioMB.usuario.cep}" mask="99.999-999" style="width: 90%"/>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <p:outputLabel value="Endereço:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.endereco}" style="width: 86%"/>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="Número:" style="display: block"/>
+                                        <p:inputMask readonly="true" mask="9?9999" value="#{buscaUsuarioMB.usuario.numero}"  />
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="Complemento:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.complemento}" />
+                                    </div>
+
+                                </div>
+
+                                <div class="row" style="margin-top: 1%">       
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="Bairro:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.bairro}" style="width: 90%"/>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <p:outputLabel value="Cidade:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.cidade}" style="width: 86%"/>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <p:outputLabel value="Estado:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.uf}" />
+                                            
+                                    </div>
+
+                                </div>
+
+                                <p:separator title="Dados de Contato"/>
+
+
+                                <div class="row" style="margin-top: 1%">       
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="E-mail:" style="display: block"/>
+                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.email}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Telefone:" style="display: block"/>
+                                        <p:inputMask readonly="true" mask="(99)9999-9999" value="#{buscaUsuarioMB.usuario.telefone}" style="width: 100%" placeholder="(00)0000-0000"/>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <p:outputLabel value="Celular:" style="display: block"/>
+                                        <p:inputMask readonly="true" mask="(99)99999-9999" value="#{buscaUsuarioMB.usuario.celular}" style="width: 100%" placeholder="(00)00000-0000"/>
+                                    </div>
+
+
+                                </div>
+                                
+                                <p:separator/>
+                                
+                                <p:dataTable value="#{buscaUsuarioMB.bikes}" style="text-align: center" var="b">
+                                    <f:facet name="header">
+                                        Bicicletas
+                                    </f:facet>
+                                    
+                                    
+                                    <p:column headerText="Chassi">
+                                        <p:outputLabel value="#{b.chassi}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Marca">
+                                        <p:outputLabel value="#{b.marca}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Cores">
+                                        <p:outputLabel value="#{b.cores}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Aro">
+                                        <p:outputLabel value="#{b.aro}"/>
+                                    </p:column>
+
+
+                                </p:dataTable>
+
+                            </div>
+                        </div>
+                    </h:body>
+                </h:form>
+
+            </center>
+        </div>
+    </ui:define>
+</ui:composition>
