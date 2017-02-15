@@ -266,7 +266,6 @@ public class Util {
 
         try {
             email.addTo(usuario.getEmail());
-
             email.setFrom("contato@amociclismo.com.br", "AMO CICLISMO");
             email.setSubject("Confirmação de Cadastro - AMO CICLISMO");
 
@@ -291,7 +290,7 @@ public class Util {
                     + "								<h4>\n"
                     + "                                    <center><p><b>Olá," + usuario.getNome() + "<b/></p>\n"
                     + "                                    <p>Para confirmar seu cadastro acesse o link abaixo.</p>\n"
-                    + "                                    <center><img src='http://www.bodyfitnesspt.com/wp-content/uploads/2014/04/blue-tick.png' style='width: 100px; height: 100px'/></center>\n"
+                    + "                                    <center><a href='http://201.16.160.18:8082/amociclismo/index2.jsf'><img src='http://www.bodyfitnesspt.com/wp-content/uploads/2014/04/blue-tick.png' style='width: 100px; height: 100px'/></a></center>\n"
                     + "                                </h4>\n"
                     + "                                \n"
                     + "								<img src='http://www.amociclismo.com.br/Imagens/AmoCiclismo.jpg' style='width: 150px; height: 150px; margin-top: 40px'/>\n"

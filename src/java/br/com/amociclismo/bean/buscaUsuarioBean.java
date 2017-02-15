@@ -14,79 +14,81 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author Vinicius
  */
-@ManagedBean(name="buscaUsuarioMB")
+@ManagedBean(name = "buscaUsuarioMB")
 @ViewScoped
 public class buscaUsuarioBean {
-    
+
     private Usuario usuario;
     private Bike bike;
-    
+
     private UsuarioDAO usuarioDAO;
     private BikeDAO bikeDAO;
-    
+
     private List<Bike> bikes;
     private List<Usuario> usuarios;
-    
+
     private String tipoPesquisa = "";
     private String valorPesquisa = "";
-    
+
     private boolean habilitarSalvar = true;
 
-    
     /**
      * Construtor
      */
     public buscaUsuarioBean() {
         bikeDAO = new BikeDAO();
         usuarioDAO = new UsuarioDAO();
-        
-        bike =  new Bike();
+
+        bike = new Bike();
         usuario = new Usuario();
-        
+
         bikes = new ArrayList<Bike>();
         usuarios = new ArrayList<>();
     }
-    
+
     /**
      * Metodo que busca usuarios
      */
-    public void buscarUsuario(){
-        
-        if(tipoPesquisa.equals("1")){
+    public void buscarUsuario() {
+
+        if (tipoPesquisa.equals("1")) {
             usuario = usuarioDAO.getUsuarioByCpf(valorPesquisa);
-            
-            if(usuario.getId() > 0){
-                usuarios.add(usuario);
+
+            if (usuario.getId() > 0) {
+                RequestContext.getCurrentInstance().execute("PF('dlgBuscaUsuario').hide()");
+                RequestContext.getCurrentInstance().update("formCadastro");
+                habilitarSalvar = false;
+                bikes = bikeDAO.getBikesByIdUsuario(usuario.getId());
+                valorPesquisa = "";
+                tipoPesquisa = "";
+                usuarios.clear();
             }
-            
+
             tipoPesquisa = "";
             valorPesquisa = "";
-        }else{
-            usuarios =  usuarioDAO.getUsuarioByNome(valorPesquisa);
+        } else {
+            usuarios = usuarioDAO.getUsuarioByNome(valorPesquisa);
             tipoPesquisa = "";
             valorPesquisa = "";
         }
-        
-        
+
     }
-    
+
     /**
      * Meotodo que atualiza usuario
      */
-    public void salvarUsuario(){
-        usuario =  usuarioDAO.updateUsuario(usuario);
+    public void salvarUsuario() {
+        usuario = usuarioDAO.updateUsuario(usuario);
         Util.saveMessage("Sucesso!", "Usuário atualizado com sucesso!");
     }
-    
-    
-    
-    ///Getters and Setters
 
+    ///Getters and Setters
     public Usuario getUsuario() {
         return usuario;
     }
@@ -147,11 +149,5 @@ public class buscaUsuarioBean {
     public void setHabilitarSalvar(boolean habilitarSalvar) {
         this.habilitarSalvar = habilitarSalvar;
     }
-    
-    
-    
-    
-    
-    
-    
+
 }

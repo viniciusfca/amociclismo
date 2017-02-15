@@ -107,14 +107,14 @@ public class BikeBean {
      * Metodo que salva uma nova bicicleta
      */
     public void salvarBike() {
-        RequestContext.getCurrentInstance().execute("PF('dlgTermo').hide()");
+        
         
         if (validarCampos().equals("")) {
             bike = bikeDAO.inserirBike(bike);
         }
 
         if (bike.getId() > 0) {
-            Util.saveMessage("Sucesso!", "Bicicleta cadastrar com sucesso.");
+            Util.saveMessage("Sucesso!", "Bicicleta cadastrada com sucesso.");
             bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
             habilitarBO = false;
             boletins = boletimDAO.getListaBoletim(bike.getId());

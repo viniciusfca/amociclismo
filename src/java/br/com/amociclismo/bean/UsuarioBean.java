@@ -8,6 +8,8 @@ package br.com.amociclismo.bean;
 import br.com.amociclismo.dao.UsuarioDAO;
 import br.com.amociclismo.entity.Usuario;
 import br.com.amociclismo.util.Util;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -108,6 +110,22 @@ public class UsuarioBean {
             Util.saveMessage("Atenção", "Falha ao efetuar cadastro.");
         }
 
+    }
+    
+    
+    /**
+     * Metodo que chama dialog com o termo de responsabilidade
+     */
+    public void aceitarTermo(){
+        if(usuario.getId() > 0 ){
+            try {
+                salvarUsuario();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            RequestContext.getCurrentInstance().execute("PF('dlgTermo').show()");
+        }
     }
     
     public void redirecionar(){
