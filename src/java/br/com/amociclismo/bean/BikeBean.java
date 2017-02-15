@@ -88,6 +88,10 @@ public class BikeBean {
             Util.saveMessage("Atenção", "O campo Velocidades é obrigatório.");
             msg += "Erro";
         }
+        
+        if(!bikeByChassi().equals("")){
+            msg += "Erro";
+        }
 
         return msg;
     }
@@ -136,19 +140,25 @@ public class BikeBean {
     /**
      * Metodo que retorna a bike pelo chassi
      */
-    public void bikeByChassi() {
+    public String bikeByChassi() {
         String chassi = bike.getChassi();
+        String erro = "";
+        Bike bikeAux = bike;
         bike = bikeDAO.getBikeByChassi(bike.getChassi());
 
         if (bike.getId() > 0 && bike.getUsuario().getId() == Util.getUsuarioLogado().getId()) {
             Util.saveMessage("Atenção", "Você já cadastrou essa bicicleta.");
+            bike = new Bike();
+            bike = bikeAux;
         } else if (bike.getId() > 0 && bike.getUsuario().getId() != Util.getUsuarioLogado().getId()) {
             Util.saveMessage("Atenção", "Essa bicicleta já está cadastrada para outro usuário.");
             bike = new Bike();
+            erro =  "Você já cadastrou essa bicicleta.";
         } else {
-            bike.setChassi(chassi);
+            bike = new Bike();
+            bike = bikeAux;
         }
-
+        return erro;
     }
 
     /**
