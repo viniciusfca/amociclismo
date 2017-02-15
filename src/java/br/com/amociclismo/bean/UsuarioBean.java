@@ -102,6 +102,7 @@ public class UsuarioBean {
 
         if (usuario.getId() > 0 && msg.equals("")) {
             Util.saveMessage("Sucesso!", "Cadastro efetuado com sucesso.");
+            RequestContext.getCurrentInstance().execute("PF('dlgTermo').hide()");
             RequestContext.getCurrentInstance().execute("PF('dlgCadastro').show()");
             Util.enviarEmail(usuario);
 
