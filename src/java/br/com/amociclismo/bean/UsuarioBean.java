@@ -11,6 +11,7 @@ import br.com.amociclismo.util.Util;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -99,12 +100,22 @@ public class UsuarioBean {
 
         if (usuario.getId() > 0 && msg.equals("")) {
             Util.saveMessage("Sucesso!", "Cadastro efetuado com sucesso.");
-            Util.redirecionar(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.jsf");
+            RequestContext.getCurrentInstance().execute("PF('dlgCadastro').show()");
+            Util.enviarEmail(usuario);
 
         } else {
+            RequestContext.getCurrentInstance().execute("PF('dlgCadastro').hide()");
             Util.saveMessage("Atenção", "Falha ao efetuar cadastro.");
         }
 
+    }
+    
+    public void redirecionar(){
+        Util.redirecionar(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.jsf");
+    }
+    
+    public void limpar(){
+        usuario = new Usuario();
     }
 
     /**

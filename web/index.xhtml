@@ -8,6 +8,34 @@
                  xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content" >
+        
+        <h:form>
+            
+            <p:dialog  id="dlgSenha"  closable="false" widgetVar="dlgSenha" width="750"  style="margin-top: 2%;text-align: center; background: transparent; box-shadow: none">
+                        <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
+                            <div class="panel-heading" >
+                                <b>REENVIAR SENHA</b>
+                            </div>
+
+                            <div class="panel" style="height: 10px;">
+                            </div>
+
+                            <div class="panel-body" style="margin-top: -1.3%">
+                                <p:inputMask value="#{utilMB.cpf}" placeholder="Informar CPF" mask="999.999.999-99" style="width:  80%; font-size: 15px; text-align: center"/>
+                                <h5>
+                                    <p><b>Olá, a senha será enviada para o e-mail vinculado ao CPF informado.</b></p>
+                                </h5>
+                                
+                                <p:commandButton action="#{utilMB.reenviarSenha()}" value="Reenviar senha" styleClass="btn-menu"/>
+                                
+
+                            </div>
+
+                        </div>
+                    </p:dialog>
+           
+        </h:form>
+        
         <div class="main" >
             
             <div class="modal-dialog" style="margin-top: 2%">
@@ -15,7 +43,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="text-center">Seja Bem-Vindo(a)</h1>
-                            <center><p:outputLabel rendered="#{loginMB.mostrarErro}" value="#{loginMB.erroLogar}" style="text-align: center; color: dodgerblue"/></center>
+                            <center><p:outputLabel rendered="#{loginMB.mostrarErro}" value="#{loginMB.erroLogar}" style="font-size: 17px;text-align: center; color: white; text-shadow: 1px 1px  black;"/></center>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
@@ -28,7 +56,7 @@
 
                             <div class="form-group">
                                 <input type="submit" class="btn btn-block btn-lg btn-primary" value="Logar"/>
-                                <span class="pull-right"><a href="cadUsuario.jsf"><b>Cadastre-se</b></a></span><span><a href="#"><b>Esqueci a senha</b></a></span>
+                                <span class="pull-right"><a href="cadUsuario.jsf"><b>Cadastre-se</b></a></span><span><a onclick="PF('dlgSenha').show()"><b>Esqueci a senha</b></a></span>
                             </div>
                         </div>
                     </div>

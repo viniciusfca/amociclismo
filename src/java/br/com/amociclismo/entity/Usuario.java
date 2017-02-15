@@ -34,7 +34,17 @@ public class Usuario {
     private String cep;
     private Date dataNascimento;
     private Date dataCadastro;
+    private boolean isAtivo;
 
+    public boolean isIsAtivo() {
+        return isAtivo;
+    }
+
+    public void setIsAtivo(boolean isAtivo) {
+        this.isAtivo = isAtivo;
+    }
+
+    
     public String getCep() {
         return cep;
     }

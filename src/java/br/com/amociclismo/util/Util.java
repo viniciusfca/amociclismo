@@ -5,6 +5,7 @@
  */
 package br.com.amociclismo.util;
 
+import br.com.amociclismo.dao.UsuarioDAO;
 import br.com.amociclismo.entity.Usuario;
 import java.io.IOException;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
@@ -39,24 +41,25 @@ public class Util {
         context.addMessage(null, new FacesMessage(msg, alert));
 
     }
-    
-     /**
+
+    /**
      * Metodo que remove usuario da sessao
      */
-    public static void retirarUsuarioSessao(){
+    public static void retirarUsuarioSessao() {
         HttpSession ses = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         ses.invalidate();
     }
-    
-     /**
+
+    /**
      * Metodo que coloca o usuario na sessao
-     * @param usuario 
+     *
+     * @param usuario
      */
-    public static void colocarUsuarioSessao(Usuario usuario){
+    public static void colocarUsuarioSessao(Usuario usuario) {
         HttpSession ses = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ses.setAttribute("usuarioLogado", usuario);            
+        ses.setAttribute("usuarioLogado", usuario);
     }
-    
+
     /**
      * Método que converte a Date util para Date sql
      *
@@ -78,15 +81,15 @@ public class Util {
 
         return sqlDate;
     }
-    
-    
+
     /**
      * Metodo que redireciona pagina
-     * @param url 
+     *
+     * @param url
      */
-    public static void redirecionar(String url){
+    public static void redirecionar(String url) {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        try {        
+        try {
             ec.redirect(url);
         } catch (IOException ex) {
             saveMessage("Erro ao Redirecionar", ex.getMessage());
@@ -235,14 +238,154 @@ public class Util {
         }
         return ip;
     }
-    
-    
+
     /**
      * Metodo que retorna o usuario logado
-     * @return 
+     *
+     * @return
      */
-    public static Usuario getUsuarioLogado(){
+    public static Usuario getUsuarioLogado() {
         return (Usuario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioLogado");
-    }   
+    }
+
+    /**
+     * Metodo que envia email
+     */
+    public static void enviarEmail(Usuario usuario) {
+
+        HtmlEmail email = new HtmlEmail();
+//        email.setHostName("webmail.acifranca.com.br");
+//        email.setSmtpPort(587);
+//        email.setAuthentication("vinicius@acifranca.com.br", "Vencer738Sempre");
+
+        email.setHostName("smtp.gmail.com");
+        email.setSmtpPort(465);
+        email.setSSLOnConnect(true);
+        email.setDebug(true);
+        email.setAuthentication("homework.fca@gmail.com", "homework@");
+
+        try {
+            email.addTo(usuario.getEmail());
+
+            email.setFrom("contato@amociclismo.com.br", "AMO CICLISMO");
+            email.setSubject("Confirmação de Cadastro - AMO CICLISMO");
+
+            String emailBody = "<html>\n"
+                    + "<head>\n"
+                    + "	<title>.::AMO CICLISMO::.</title>\n"
+                    + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
+                    + "</head>\n"
+                    + "\n"
+                    + "	<body>\n"
+                    + "		<div class='panel panel-info' style='font-size: 11px;width: 600px;height: 510px;'  >\n"
+                    + "                            <div class='panel-heading' >\n"
+                    + "                                <b><center>.::AMO CICLISMO::.</b></center>\n"
+                    + "                            </div>\n"
+                    + "\n"
+                    + "                            <div class='panel' style='height: 10px;'>\n"
+                    + "								\n"
+                    + "                            </div>\n"
+                    + "\n"
+                    + "                            <div class='panel-body' style='margin-top: -1.3%'>\n"
+                    + "                                <h3><center>CADASTRO EFETUADO COM SUCESSO</center></h3>\n"
+                    + "								<h4>\n"
+                    + "                                    <center><p><b>Olá," + usuario.getNome() + "<b/></p>\n"
+                    + "                                    <p>Para confirmar seu cadastro acesse o link abaixo.</p>\n"
+                    + "                                    <center><img src='http://www.bodyfitnesspt.com/wp-content/uploads/2014/04/blue-tick.png' style='width: 100px; height: 100px'/></center>\n"
+                    + "                                </h4>\n"
+                    + "                                \n"
+                    + "								<img src='http://www.amociclismo.com.br/Imagens/AmoCiclismo.jpg' style='width: 150px; height: 150px; margin-top: 40px'/>\n"
+                    + "								<p style='margin-left: 15px'>Equipe AMO CICLISMO.</p>\n"
+                    + "                            </div>\n"
+                    + "\n"
+                    + "                        </div>\n"
+                    + "	\n"
+                    + "	\n"
+                    + "	</body>\n"
+                    + "</html>";
+
+            email.setHtmlMsg(emailBody);
+            email.send();
+
+        } catch (Exception e) {
+            System.out.println("Erro Falha ao enviar email " + e.getMessage());
+        }
+
+    }
+
+    public static String reenviarSenha(String cpf) {
+
+        Usuario usuario = new Usuario();
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        String retorno = "";
+
+        usuario = usuarioDAO.getUsuarioByCpf(retirarPontos(cpf));
+
+        if (usuario.getId() > 0) {
+            HtmlEmail email = new HtmlEmail();
+//        email.setHostName("webmail.acifranca.com.br");
+//        email.setSmtpPort(587);
+//        email.setAuthentication("vinicius@acifranca.com.br", "Vencer738Sempre");
+
+            email.setHostName("smtp.gmail.com");
+            email.setSmtpPort(465);
+            email.setSSLOnConnect(true);
+            email.setDebug(true);
+            email.setAuthentication("homework.fca@gmail.com", "homework@");
+
+            try {
+                email.addTo(usuario.getEmail());
+
+                email.setFrom("contato@amociclismo.com.br", "AMO CICLISMO");
+                email.setSubject("Recuperação de Senha - AMO CICLISMO");
+
+                String emailBody = "<html>\n"
+                        + "<head>\n"
+                        + "	<title>.::AMO CICLISMO::.</title>\n"
+                        + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
+                        + "</head>\n"
+                        + "\n"
+                        + "	<body>\n"
+                        + "		<div class='panel panel-info' style='font-size: 11px;width: 600px;height: 510px;'  >\n"
+                        + "                            <div class='panel-heading' >\n"
+                        + "                                <b><center>.::AMO CICLISMO::.</b></center>\n"
+                        + "                            </div>\n"
+                        + "\n"
+                        + "                            <div class='panel' style='height: 10px;'>\n"
+                        + "								\n"
+                        + "                            </div>\n"
+                        + "\n"
+                        + "                            <div class='panel-body' style='margin-top: -1.3%'>\n"
+                        + "                                <h3><center>RECUPERAÇÃO DE SENHA</center></h3>\n"
+                        + "								<h4>\n"
+                        + "                                    <center><p><b>Olá," + usuario.getNome() + "<b/></p>\n"
+                        + "                                    <p>Sua senha é:</p>\n"
+                        + "                                    <center><b>" + decrypt(usuario.getSenha()) + "</center>\n"
+                        + "                                </h4>\n"
+                        + "                                \n"
+                        + "								<img src='http://www.amociclismo.com.br/Imagens/AmoCiclismo.jpg' style='width: 150px; height: 150px; margin-top: 40px'/>\n"
+                        + "								<p style='margin-left: 15px'>Equipe AMO CICLISMO.</p>\n"
+                        + "                            </div>\n"
+                        + "\n"
+                        + "                        </div>\n"
+                        + "	\n"
+                        + "	\n"
+                        + "	</body>\n"
+                        + "</html>";
+
+                email.setHtmlMsg(emailBody);
+                email.send();
+                
+                retorno = "Senha reenviada para o e-mail vinculado ao CPF.";
+
+            } catch (Exception e) {
+                System.out.println("Erro Falha ao enviar email " + e.getMessage());
+            }
+        }else{
+            retorno = "O CPF informado não está cadastrado na nossa base.";
+        }
+        
+        return retorno;
+    }
 
 }

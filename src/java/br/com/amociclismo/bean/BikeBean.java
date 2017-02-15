@@ -52,18 +52,75 @@ public class BikeBean {
     }
 
     /**
+     * Metodo que valida campos antes de salvar
+     *
+     * @return
+     */
+    public String validarCampos() {
+        String msg = "";
+
+        if (bike.getChassi().equals("") || bike.getChassi().length() < 1) {
+            Util.saveMessage("Atenção", "O campo Chassi é obrigatório.");
+            msg += "Erro";
+        }
+
+        if (bike.getMarca().equals("") || bike.getMarca().length() < 1) {
+            Util.saveMessage("Atenção", "O campo Marca é obrigatório.");
+            msg += "Erro";
+        }
+
+        if (bike.getModelo().equals("") || bike.getModelo().length() < 1) {
+            Util.saveMessage("Atenção", "O campo Modelo é obrigatório.");
+            msg += "Erro";
+        }
+
+        if (bike.getCores().equals("") || bike.getCores().length() < 1) {
+            Util.saveMessage("Atenção", "O campo Cores é obrigatório.");
+            msg += "Erro";
+        }
+
+        if (bike.getAro().equals("") || bike.getAro().length() < 1) {
+            Util.saveMessage("Atenção", "O campo Aro é obrigatório.");
+            msg += "Erro";
+        }
+
+        if (bike.getVelocidades().equals("") || bike.getVelocidades().length() < 1) {
+            Util.saveMessage("Atenção", "O campo Velocidades é obrigatório.");
+            msg += "Erro";
+        }
+
+        return msg;
+    }
+    
+    /**
+     * Metodo que chama dialog com o termo de responsabilidade
+     */
+    public void aceitarTermo(){
+        if(bike.getId() > 0 ){
+            salvarBike();
+        }else{
+            RequestContext.getCurrentInstance().execute("PF('dlgTermo').show()");
+        }
+    }
+
+    /**
      * Metodo que salva uma nova bicicleta
      */
     public void salvarBike() {
-
-        bike = bikeDAO.inserirBike(bike);
+        RequestContext.getCurrentInstance().execute("PF('dlgTermo').hide()");
+        
+        if (validarCampos().equals("")) {
+            bike = bikeDAO.inserirBike(bike);
+        }
 
         if (bike.getId() > 0) {
-            Util.saveMessage("Sucesso!", "Bicicleta cadastra com sucesso.");
+            Util.saveMessage("Sucesso!", "Bicicleta cadastrar com sucesso.");
             bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
             habilitarBO = false;
             boletins = boletimDAO.getListaBoletim(bike.getId());
 
+        }else{
+            Util.saveMessage("Atenção!", "Falha ao cadastrar a bicicleta.");
         }
     }
 
@@ -107,6 +164,17 @@ public class BikeBean {
             Util.saveMessage("Atenção!", "Falha ao cadastrar boletim!");
         }
 
+    }
+    
+    /**
+     * Metodo que exclui boletim
+     * @param idBoletim 
+     */
+    public void deletarBoletim(int idBoletim){
+        boletimDAO.deletarBoletim(idBoletim);
+        boletins = boletimDAO.getListaBoletim(bike.getId());
+        
+        Util.saveMessage("Sucesso", "Boletim excluído com sucesso!");
     }
 
     public Bike getBike() {

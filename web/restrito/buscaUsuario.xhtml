@@ -11,7 +11,7 @@
         <div class="main" >
             <center>
 
-                <h:form id="formCadastro" style="margin-top: -90px;height: 1080px;width: 100%;" >
+                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
 
                     <p:dialog resizable="false" id="dlgBuscaUsuario" widgetVar="dlgBuscaUsuario" width="800" >
                         <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
@@ -132,22 +132,22 @@
 
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Nome:" style="display: block"/>
-                                        <p:inputText  readonly="true" value="#{buscaUsuarioMB.usuario.nome}"  style="width: 86%"/>
+                                        <p:inputText   value="#{buscaUsuarioMB.usuario.nome}"  style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="RG:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.rg}"/>
+                                        <p:inputText  value="#{buscaUsuarioMB.usuario.rg}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Data de Nascimento:" style="display: block"/>
-                                        <p:calendar readonly="true" value="#{buscaUsuarioMB.usuario.dataNascimento}" showOn="false" mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt" />
+                                        <p:calendar  value="#{buscaUsuarioMB.usuario.dataNascimento}" showOn="false" mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt" />
                                     </div>
 
                                     <div class="col-lg-1" >
                                         <p:outputLabel value="Sexo:" style="display: block"/>
-                                        <p:inputText readonly="true" style="width: 50%" value="#{buscaUsuarioMB.usuario.sexo}"/>
+                                        <p:inputText  style="width: 50%" value="#{buscaUsuarioMB.usuario.sexo}"/>
                                             
                                     </div>
                                     
@@ -170,22 +170,22 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-2">
                                         <p:outputLabel value="CEP:" style="display: block"/>
-                                        <p:inputMask readonly="true" value="#{buscaUsuarioMB.usuario.cep}" mask="99.999-999" style="width: 90%"/>
+                                        <p:inputMask  value="#{buscaUsuarioMB.usuario.cep}" mask="99.999-999" style="width: 90%"/>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <p:outputLabel value="Endereço:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.endereco}" style="width: 86%"/>
+                                        <p:inputText  value="#{buscaUsuarioMB.usuario.endereco}" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Número:" style="display: block"/>
-                                        <p:inputMask readonly="true" mask="9?9999" value="#{buscaUsuarioMB.usuario.numero}"  />
+                                        <p:inputMask  mask="9?9999" value="#{buscaUsuarioMB.usuario.numero}"  />
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Complemento:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.complemento}" />
+                                        <p:inputText  value="#{buscaUsuarioMB.usuario.complemento}" />
                                     </div>
 
                                 </div>
@@ -193,18 +193,45 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Bairro:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.bairro}" style="width: 90%"/>
+                                        <p:inputText  value="#{buscaUsuarioMB.usuario.bairro}" style="width: 90%"/>
                                     </div>
 
                                     <div class="col-lg-6">
                                         <p:outputLabel value="Cidade:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.cidade}" style="width: 86%"/>
+                                        <p:inputText  value="#{buscaUsuarioMB.usuario.cidade}" style="width: 86%"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Estado:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.uf}" />
-                                            
+                                        <p:selectOneMenu value="#{buscaUsuarioMB.usuario.uf}" >
+                                            <f:selectItem itemLabel="Acre" itemValue="AC"/>
+                                            <f:selectItem itemLabel="Alagoas" itemValue="AL"/>
+                                            <f:selectItem itemLabel="Amapá" itemValue="AP"/>
+                                            <f:selectItem itemLabel="Amazonas" itemValue="AM"/>
+                                            <f:selectItem itemLabel="Bahia" itemValue="BA"/>
+                                            <f:selectItem itemLabel="Ceará" itemValue="CE"/>
+                                            <f:selectItem itemLabel="Distrito Federal" itemValue="DF"/>
+                                            <f:selectItem itemLabel="Espírito Santo" itemValue="ES"/>
+                                            <f:selectItem itemLabel="Goiás" itemValue="GO"/>
+                                            <f:selectItem itemLabel="Maranhão" itemValue="MA"/>
+                                            <f:selectItem itemLabel="Mato Grosso" itemValue="MT"/>
+                                            <f:selectItem itemLabel="Mato Grosso do Sul" itemValue="MS"/>
+                                            <f:selectItem itemLabel="Minas Gerais" itemValue="MG"/>
+                                            <f:selectItem itemLabel="Pará" itemValue="PA"/>
+                                            <f:selectItem itemLabel="Paraíba" itemValue="PB"/>
+                                            <f:selectItem itemLabel="Paraná" itemValue="PR"/>
+                                            <f:selectItem itemLabel="Pernambuco" itemValue="PE"/>
+                                            <f:selectItem itemLabel="Piauí" itemValue="PI"/>
+                                            <f:selectItem itemLabel="Rio de Janeiro" itemValue="RJ"/>
+                                            <f:selectItem itemLabel="Rio Grande do Norte" itemValue="RN"/>
+                                            <f:selectItem itemLabel="Rio Grande do Sul" itemValue="RS"/>
+                                            <f:selectItem itemLabel="Rondônia" itemValue="RO"/>
+                                            <f:selectItem itemLabel="Roraima" itemValue="RR"/>
+                                            <f:selectItem itemLabel="Santa Catarina" itemValue="SC"/>
+                                            <f:selectItem itemLabel="São Paulo" itemValue="SP"/>
+                                            <f:selectItem itemLabel="Sergipe" itemValue="SE"/>
+                                            <f:selectItem itemLabel="Tocantins" itemValue="TO"/>
+                                        </p:selectOneMenu>    
                                     </div>
 
                                 </div>
@@ -215,17 +242,17 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-3">
                                         <p:outputLabel value="E-mail:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaUsuarioMB.usuario.email}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
+                                        <p:inputText  value="#{buscaUsuarioMB.usuario.email}" style="width: 100%" placeholder="exemplo@exemplo.com.br"/>
                                     </div>
 
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Telefone:" style="display: block"/>
-                                        <p:inputMask readonly="true" mask="(99)9999-9999" value="#{buscaUsuarioMB.usuario.telefone}" style="width: 100%" placeholder="(00)0000-0000"/>
+                                        <p:inputMask  mask="(99)9999-9999" value="#{buscaUsuarioMB.usuario.telefone}" style="width: 100%" placeholder="(00)0000-0000"/>
                                     </div>
 
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Celular:" style="display: block"/>
-                                        <p:inputMask readonly="true" mask="(99)99999-9999" value="#{buscaUsuarioMB.usuario.celular}" style="width: 100%" placeholder="(00)00000-0000"/>
+                                        <p:inputMask  mask="(99)99999-9999" value="#{buscaUsuarioMB.usuario.celular}" style="width: 100%" placeholder="(00)00000-0000"/>
                                     </div>
 
 

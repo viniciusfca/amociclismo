@@ -117,5 +117,26 @@ public class BoletimDAO {
 
         return boletins;
     }
+    
+    /**
+     * Metodo que exclui boletim de ocorrencia
+     * @param idBoletim 
+     */
+    public void deletarBoletim(int idBoletim){
+        Conexao conexao = new Conexao();
+        PreparedStatement ps =  null;
+        String sql = "DELETE FROM Boletim WHERE id = ?";
+        
+        try{
+            ps = conexao.conectar().prepareStatement(sql);
+            ps.setInt(1, idBoletim);
+            ps.executeUpdate();
+            
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+    }
 
 }

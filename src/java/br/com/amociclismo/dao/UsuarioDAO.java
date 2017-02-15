@@ -33,7 +33,7 @@ public class UsuarioDAO {
 
         try {
 
-            cst = conexao.conectar().prepareCall("{call amociclismo.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            cst = conexao.conectar().prepareCall("{call amociclismo.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             cst.setString(1, usuario.getNome());
             cst.setString(2, usuario.getSexo());
             cst.setString(3, usuario.getCpf());
@@ -52,6 +52,7 @@ public class UsuarioDAO {
             cst.setString(16, Util.encrypt(usuario.getSenha()));
             cst.setString(17, "C");
             cst.setString(18, Util.getIp());
+            cst.setBoolean(19, false);
 
             cst.execute();
 
@@ -86,7 +87,7 @@ public class UsuarioDAO {
 
         try {
 
-            cst = conexao.conectar().prepareCall("{call amociclismo.uUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            cst = conexao.conectar().prepareCall("{call amociclismo.uUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             cst.setString(1, usuario.getNome());
             cst.setString(2, usuario.getSexo());
             cst.setString(3, usuario.getCpf());
@@ -106,7 +107,7 @@ public class UsuarioDAO {
             cst.setString(17, usuario.getTipo());
             cst.setString(18, Util.getIp());
             cst.setInt(19, usuario.getId());
-
+            cst.setBoolean(20, true);
             cst.execute();
 
         } catch (Exception e) {
@@ -200,6 +201,7 @@ public class UsuarioDAO {
                 usuario.setTipo(rs.getString("tipo"));
                 usuario.setSexo(rs.getString("sexo"));
                 usuario.setSenha(rs.getString("senha"));
+                usuario.setIsAtivo(rs.getBoolean("ativo"));
 
             }
 
@@ -305,6 +307,7 @@ public class UsuarioDAO {
                 usuario.setTipo(rs.getString("tipo"));
                 usuario.setSexo(rs.getString("sexo"));
                 usuario.setSenha(Util.decrypt(rs.getString("senha")));
+                usuario.setIsAtivo(rs.getBoolean("ativo"));
 
             }
 
