@@ -31,6 +31,8 @@ public class BikeBean {
     private BoletimDAO boletimDAO;
 
     private int idBike = 0;
+    
+    private String cpfTransferencia;
 
     private boolean habilitarBO = true;
 
@@ -94,6 +96,21 @@ public class BikeBean {
         }
 
         return msg;
+    }
+    
+    /**
+     * Metodo que transfere bike
+     */
+    public void transferirBike(){
+       String retorno = bikeDAO.transferirBike(cpfTransferencia, bike.getUsuario().getId() , bike.getId());
+       
+       if(!retorno.equals("Não existe usuário cadastrado para o CPF informado.")){
+           Util.saveMessage("Sucesso", "Sua Bicicleta foi transferida para: " + retorno);
+           bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
+       }else{
+           Util.saveMessage("Atenção!", retorno);
+           retorno = "";
+       }
     }
     
     /**
@@ -240,4 +257,13 @@ public class BikeBean {
         this.bikes = bikes;
     }
 
+    public String getCpfTransferencia() {
+        return cpfTransferencia;
+    }
+
+    public void setCpfTransferencia(String cpfTransferencia) {
+        this.cpfTransferencia = cpfTransferencia;
+    }
+    
+    
 }

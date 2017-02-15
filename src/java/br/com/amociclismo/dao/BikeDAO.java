@@ -170,6 +170,50 @@ public class BikeDAO {
 
         return b;
     }
+    
+    /**
+     * Metodo que efetua a transferência da bike
+     * @return 
+     */
+    public String transferirBike(String cpf , int idUsuario, int idBike){
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        String sql = "UPDATE BIKE set idUsuario = ? WHERE id = ?";
+        String erro = "";
+        
+        try{
+            
+            Usuario usuario =  new Usuario();
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            usuario = usuarioDAO.getUsuarioByCpf(Util.retirarPontos(cpf));
+            
+            if(usuario.getId() > 0 ){
+                ps = conexao.conectar().prepareStatement(sql);
+                ps.setInt(1,usuario.getId());
+                ps.setInt(2, idBike);
+                
+                ps.executeUpdate();
+                
+                
+                TransferenciaDAO transfDAO  = new TransferenciaDAO();
+                transfDAO.inserirLogTransferencia(idUsuario, idBike);
+                
+                erro = usuario.getNome();
+            }else{
+                erro = "Não existe usuário cadastrado para o CPF informado.";
+            }
+           
+            
+            
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+            erro = e.getMessage();
+        }finally{
+            conexao.desconectar();
+        }
+        
+        return erro;
+    }
 
     /**
      * Retorna uma lista de bikes pela pesquisa
