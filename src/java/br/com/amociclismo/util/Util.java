@@ -254,23 +254,21 @@ public class Util {
     public static void enviarEmail(Usuario usuario) {
 
         HtmlEmail email = new HtmlEmail();
-//        email.setHostName("webmail.acifranca.com.br");
-//        email.setSmtpPort(587);
-//        email.setAuthentication("vinicius@acifranca.com.br", "Vencer738Sempre");
 
-        email.setHostName("smtp.gmail.com");
-        email.setSmtpPort(465);
+        email.setHostName("mail.amociclismo.com.br");
+        email.setSmtpPort(587);
         email.setSSLOnConnect(true);
         email.setDebug(true);
-        email.setAuthentication("homework.fca@gmail.com", "homework@");
+        email.setAuthentication("suporte@amociclismo.com.br", "Bike#$AmoBike");
 
         try {
             email.addTo(usuario.getEmail());
-            email.setFrom("contato@amociclismo.com.br", "AMO CICLISMO");
+            email.setFrom("suporte@amociclismo.com.br", "AMO CICLISMO");
             email.setSubject("Confirmação de Cadastro - AMO CICLISMO");
 
             String emailBody = "<html>\n"
                     + "<head>\n"
+                    + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>"
                     + "	<title>.::AMO CICLISMO::.</title>\n"
                     + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
                     + "</head>\n"
@@ -290,7 +288,7 @@ public class Util {
                     + "								<h4>\n"
                     + "                                    <center><p><b>Olá," + usuario.getNome() + "<b/></p>\n"
                     + "                                    <p>Para confirmar seu cadastro acesse o link abaixo.</p>\n"
-                    + "                                    <center><a href='http://201.16.160.18:8082/amociclismo/index2.jsf'><img src='http://www.bodyfitnesspt.com/wp-content/uploads/2014/04/blue-tick.png' style='width: 100px; height: 100px'/></a></center>\n"
+                    + "                                    <center><a href='http://www.amociclismo.com.br/amociclismo/index2.jsf'><img src='http://www.bodyfitnesspt.com/wp-content/uploads/2014/04/blue-tick.png' style='width: 100px; height: 100px'/></a></center>\n"
                     + "                                </h4>\n"
                     + "                                \n"
                     + "								<img src='http://www.amociclismo.com.br/Imagens/AmoCiclismo.jpg' style='width: 150px; height: 150px; margin-top: 40px'/>\n"
@@ -322,24 +320,23 @@ public class Util {
 
         if (usuario.getId() > 0) {
             HtmlEmail email = new HtmlEmail();
-//        email.setHostName("webmail.acifranca.com.br");
-//        email.setSmtpPort(587);
-//        email.setAuthentication("vinicius@acifranca.com.br", "Vencer738Sempre");
 
-            email.setHostName("smtp.gmail.com");
-            email.setSmtpPort(465);
+
+            email.setHostName("mail.amociclismo.com.br");
+            email.setSmtpPort(587);
             email.setSSLOnConnect(true);
             email.setDebug(true);
-            email.setAuthentication("homework.fca@gmail.com", "homework@");
+            email.setAuthentication("suporte@amociclismo.com.br", "Bike#$AmoBike");
 
             try {
                 email.addTo(usuario.getEmail());
 
-                email.setFrom("contato@amociclismo.com.br", "AMO CICLISMO");
+                email.setFrom("suporte@amociclismo.com.br", "AMO CICLISMO");
                 email.setSubject("Recuperação de Senha - AMO CICLISMO");
 
                 String emailBody = "<html>\n"
                         + "<head>\n"
+                        + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>"
                         + "	<title>.::AMO CICLISMO::.</title>\n"
                         + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
                         + "</head>\n"
@@ -371,19 +368,20 @@ public class Util {
                         + "	\n"
                         + "	</body>\n"
                         + "</html>";
-
+                
+                
                 email.setHtmlMsg(emailBody);
                 email.send();
-                
+
                 retorno = "Senha reenviada para o e-mail vinculado ao CPF.";
 
             } catch (Exception e) {
                 System.out.println("Erro Falha ao enviar email " + e.getMessage());
             }
-        }else{
+        } else {
             retorno = "O CPF informado não está cadastrado na nossa base.";
         }
-        
+
         return retorno;
     }
 
