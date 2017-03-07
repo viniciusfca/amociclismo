@@ -50,6 +50,7 @@ public class buscaUsuarioBean {
 
         bikes = new ArrayList<Bike>();
         usuarios = new ArrayList<>();
+        tipoPesquisa = "2";
     }
 
     /**
@@ -87,7 +88,21 @@ public class buscaUsuarioBean {
         usuario = usuarioDAO.updateUsuario(usuario);
         Util.saveMessage("Sucesso!", "Usuário atualizado com sucesso!");
     }
-
+    
+    /**
+     * Metodo que exclui usuario
+     */
+    public void excluirUsuario(){
+        if(usuarioDAO.excluirUsuario(usuario.getId())){
+            Util.saveMessage("Sucesso!", "Usuário excluído com sucesso!");
+            RequestContext.getCurrentInstance().execute("PF('dlgExcluir').hide()");
+            usuario = new Usuario();
+        }else{
+            Util.saveMessage("Atenção", "Falhar ao excluir usuário!");
+        }
+    }
+ 
+    
     ///Getters and Setters
     public Usuario getUsuario() {
         return usuario;
@@ -98,9 +113,11 @@ public class buscaUsuarioBean {
         habilitarSalvar = false;
         bikes = bikeDAO.getBikesByIdUsuario(usuario.getId());
         valorPesquisa = "";
-        tipoPesquisa = "";
+        tipoPesquisa = "2";
         usuarios.clear();
     }
+    
+    
 
     public Bike getBike() {
         return bike;

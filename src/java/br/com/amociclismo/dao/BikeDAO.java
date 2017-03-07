@@ -259,5 +259,32 @@ public class BikeDAO {
 
         return bikes;
     }
+    
+    /**
+     * Metodo que excluir bike
+     * @param idBike
+     * @return 
+     */
+    public boolean excluirBike(int idBike){
+        Conexao conexao =  new Conexao();
+        PreparedStatement ps = null;
+        boolean retorno;
+        String sql ="DELETE FROM bike where id = ?";
+        
+        try{
+            ps = conexao.conectar().prepareStatement(sql);
+            ps.setInt(1, idBike);
+            ps.executeUpdate();
+            
+            retorno = true;
+        }catch(Exception e){
+            retorno =  false;
+            System.out.println("Erro: " + e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+        
+        return retorno;
+    }
 
 }

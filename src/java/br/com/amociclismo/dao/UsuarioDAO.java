@@ -267,6 +267,35 @@ public class UsuarioDAO {
 
         return usuarios;
     }
+    
+    /**
+     * Metodo que exclui usuario
+     * @param idUsuario
+     * @return 
+     */
+    public boolean excluirUsuario(int idUsuario){
+        Conexao conexao = new Conexao();
+        String sql = "DELETE FROM usuario where id = ?";
+        PreparedStatement ps =  null;
+        boolean retorno;
+        try{
+            
+            ps = conexao.conectar().prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            ps.executeUpdate();
+            
+            retorno = true;
+            
+            
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+            retorno = false;
+        }finally{
+            conexao.desconectar();
+        }
+        
+        return retorno;
+    }
 
     /**
      * Meotodo que retorna um usuario pelo login e senha

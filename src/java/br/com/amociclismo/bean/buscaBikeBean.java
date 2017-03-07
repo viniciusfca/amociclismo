@@ -11,10 +11,12 @@ import br.com.amociclismo.dao.UsuarioDAO;
 import br.com.amociclismo.entity.Bike;
 import br.com.amociclismo.entity.Boletim;
 import br.com.amociclismo.entity.Usuario;
+import br.com.amociclismo.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -36,6 +38,8 @@ public class buscaBikeBean {
     
     private String valorPesquisa;
     private String tipoPesquisa;
+    
+    private boolean habiliarExcluir = true;
 
     public buscaBikeBean() {
         this.bike = new Bike();
@@ -48,6 +52,8 @@ public class buscaBikeBean {
         usuarioDAO =  new UsuarioDAO();
         bikeDAO = new BikeDAO();
         boletimDAO = new BoletimDAO();
+        
+        tipoPesquisa = "3";
     }
     
     /**
@@ -86,6 +92,18 @@ public class buscaBikeBean {
     }
     
     
+    public void excluirBike(){
+        if(bikeDAO.excluirBike(bike.getId())){
+            bike = new Bike();
+            Util.saveMessage("Sucesso", "Bicicleta excluída com sucesso!");
+            RequestContext.getCurrentInstance().execute("PF('dlgExcluir').hide()");
+            habiliarExcluir = true;
+        }else{
+            Util.saveMessage("Atenção", "Falha ao excluir bicicleta!");
+        }
+    }
+    
+    
     ///Getters and Setters
 
     public Bike getBike() {
@@ -96,8 +114,9 @@ public class buscaBikeBean {
         this.bike = bike;
         boletins =  boletimDAO.getListaBoletim(bike.getId());
         valorPesquisa = "";
-        tipoPesquisa = "";
+        tipoPesquisa = "3";
         bikes.clear();
+        habiliarExcluir = false;
     }
 
     public Usuario getUsuario() {
@@ -138,6 +157,14 @@ public class buscaBikeBean {
 
     public void setTipoPesquisa(String tipoPesquisa) {
         this.tipoPesquisa = tipoPesquisa;
+    }
+
+    public boolean isHabiliarExcluir() {
+        return habiliarExcluir;
+    }
+
+    public void setHabiliarExcluir(boolean habiliarExcluir) {
+        this.habiliarExcluir = habiliarExcluir;
     }
     
     
