@@ -30,12 +30,12 @@ public class BikeDAO {
         Conexao conexao = new Conexao();
         CallableStatement cst;
         PreparedStatement psUpdate = null;
-        String update = "UPDATE Bike  SET chassi = ?, marca = ?, modelo = ?, cores = ?, aro = ?, velocidade = ?, observacao = ?, localCompra = ?, notaFiscal = ? WHERE id = ?";
+        String update = "UPDATE bike  SET chassi = ?, marca = ?, modelo = ?, cores = ?, aro = ?, velocidade = ?, observacao = ?, localCompra = ?, notaFiscal = ? WHERE id = ?";
 
         try {
 
             if (bike.getId() < 1) {
-                cst = conexao.conectar().prepareCall("{call amociclismo.iBike(?,?,?,?,?,?,?,?,?,?)}");
+                cst = conexao.conectar().prepareCall("{call amocicli_bd.iBike(?,?,?,?,?,?,?,?,?,?)}");
                 cst.setInt(1, Util.getUsuarioLogado().getId());
                 cst.setString(2, bike.getChassi());
                 cst.setString(3, bike.getMarca());
@@ -95,7 +95,7 @@ public class BikeDAO {
         PreparedStatement ps = null;
 
         try {
-            ps = conexao.conectar().prepareStatement("SELECT * FROM Bike WHERE idUsuario = ? ORDER BY id desc");
+            ps = conexao.conectar().prepareStatement("SELECT * FROM bike WHERE idUsuario = ? ORDER BY id desc");
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
 
@@ -138,7 +138,7 @@ public class BikeDAO {
         PreparedStatement ps = null;
         Bike b = new Bike();
         try {
-            ps = conexao.conectar().prepareStatement("SELECT * FROM Bike WHERE chassi = ?");
+            ps = conexao.conectar().prepareStatement("SELECT * FROM bike WHERE chassi = ?");
             ps.setString(1, chassi);
 
             ResultSet rs = ps.executeQuery();
@@ -178,7 +178,7 @@ public class BikeDAO {
     public String transferirBike(String cpf , int idUsuario, int idBike){
         Conexao conexao = new Conexao();
         PreparedStatement ps = null;
-        String sql = "UPDATE BIKE set idUsuario = ? WHERE id = ?";
+        String sql = "UPDATE bike set idUsuario = ? WHERE id = ?";
         String erro = "";
         
         try{
@@ -222,7 +222,7 @@ public class BikeDAO {
      * @return
      */
     public List<Bike> listarBike(String valorPesquisa) {
-        String sql = "SELECT * FROM Bike WHERE ";
+        String sql = "SELECT * FROM bike WHERE ";
         Conexao conexao = new Conexao();
         PreparedStatement ps = null;
         List<Bike> bikes = new ArrayList<Bike>();

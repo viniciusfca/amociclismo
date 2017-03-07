@@ -17,7 +17,7 @@ public class TransferenciaDAO {
     public void inserirLogTransferencia(int idUsuario, int idBike){
         Conexao conexao = new Conexao();
         PreparedStatement ps = null;
-        String sql = "INSERT INTO Transferencia (idUsuario,idBike, dataTransferencia) values (?,?,NOW())";
+        String sql = "INSERT INTO transferencia (idUsuario,idBike, dataTransferencia) values (?,?,NOW())";
         
         try{
             ps = conexao.conectar().prepareStatement(sql);

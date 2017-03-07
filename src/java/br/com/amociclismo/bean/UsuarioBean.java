@@ -108,7 +108,7 @@ public class UsuarioBean {
 
         } else {
             RequestContext.getCurrentInstance().execute("PF('dlgCadastro').hide()");
-            Util.saveMessage("Atenção", "Falha ao efetuar cadastro.");
+            Util.saveMessage("Atenção", "Falha ao efetuar cadastro. Motivo: " + usuario.getMsg());
         }
 
     }

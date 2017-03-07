@@ -22,8 +22,8 @@
                     <p:menubar style="font-size: 11px;font-weight: bold" >
 
                         <p:menuitem style="font-weight: bold"  value="Cadastrar Bicicleta" url="/restrito/cadBike.jsf" />
-                        <p:menuitem style="font-weight: bold"  value=" | Buscar Bicicleta" url="/restrito/buscaBike.jsf" />
-                        <p:menuitem style="font-weight: bold"  value=" | Buscar Usuários" url="/restrito/buscaUsuario.jsf" />
+                        <p:menuitem style="font-weight: bold" rendered="#{loginMB.retornarUsuarioLogado().tipo != 'C'}"  value=" | Buscar Bicicleta" url="/restrito/buscaBike.jsf" />
+                        <p:menuitem style="font-weight: bold" rendered="#{loginMB.retornarUsuarioLogado().tipo != 'C'}" value=" | Buscar Usuários" url="/restrito/buscaUsuario.jsf" />
                        
                         <f:facet name="options">
 

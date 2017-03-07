@@ -33,7 +33,7 @@ public class UsuarioDAO {
 
         try {
 
-            cst = conexao.conectar().prepareCall("{call amociclismo.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            cst = conexao.conectar().prepareCall("{call amocicli_bd.iUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             cst.setString(1, usuario.getNome());
             cst.setString(2, usuario.getSexo());
             cst.setString(3, usuario.getCpf());
@@ -66,6 +66,7 @@ public class UsuarioDAO {
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
+            usuario.setMsg(e.getMessage());
         } finally {
             conexao.desconectar();
         }
@@ -87,7 +88,7 @@ public class UsuarioDAO {
 
         try {
 
-            cst = conexao.conectar().prepareCall("{call amociclismo.uUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
+            cst = conexao.conectar().prepareCall("{call amocicli_bd.uUsuario(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}");
             cst.setString(1, usuario.getNome());
             cst.setString(2, usuario.getSexo());
             cst.setString(3, usuario.getCpf());
@@ -129,7 +130,7 @@ public class UsuarioDAO {
         CallableStatement cst = null;
         Usuario usuario = new Usuario();
         try {
-            cst = conexao.conectar().prepareCall("{call amociclismo.getUsuarioByCpf(?)}");
+            cst = conexao.conectar().prepareCall("{call amocicli_bd.getUsuarioByCpf(?)}");
             cst.setString(1, cpf);
 
             ResultSet rs = cst.executeQuery();
@@ -176,7 +177,7 @@ public class UsuarioDAO {
         PreparedStatement ps = null;
         Usuario usuario = new Usuario();
         try {
-            ps = conexao.conectar().prepareStatement("SELECT * FROM Usuario WHERE id = ?");
+            ps = conexao.conectar().prepareStatement("SELECT * FROM usuario WHERE id = ?");
             ps.setInt(1, idUsuario);
 
             ResultSet rs = ps.executeQuery();
@@ -227,7 +228,7 @@ public class UsuarioDAO {
 
         List<Usuario> usuarios = new ArrayList<Usuario>();
         try {
-            ps = conexao.conectar().prepareStatement("SELECT * FROM Usuario WHERE nome LIKE '%"+nome+"%'");
+            ps = conexao.conectar().prepareStatement("SELECT * FROM usuario WHERE nome LIKE '%"+nome+"%'");
            
 
             ResultSet rs = ps.executeQuery();

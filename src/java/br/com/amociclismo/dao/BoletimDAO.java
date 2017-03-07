@@ -37,7 +37,7 @@ public class BoletimDAO {
 
             if (boletim.getId() < 1) {
 
-                cst = conexao.conectar().prepareCall("{call amociclismo.iBoletim(?,?,?,?,?)}");
+                cst = conexao.conectar().prepareCall("{call amocicli_bd.iBoletim(?,?,?,?,?)}");
                 cst.setInt(1, idBike);
                 cst.setDate(2, new java.sql.Date(boletim.getData().getTime()));
                 cst.setString(3, boletim.getStatus());
@@ -125,7 +125,7 @@ public class BoletimDAO {
     public void deletarBoletim(int idBoletim){
         Conexao conexao = new Conexao();
         PreparedStatement ps =  null;
-        String sql = "DELETE FROM Boletim WHERE id = ?";
+        String sql = "DELETE FROM boletim WHERE id = ?";
         
         try{
             ps = conexao.conectar().prepareStatement(sql);
