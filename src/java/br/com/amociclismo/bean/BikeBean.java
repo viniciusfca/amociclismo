@@ -168,12 +168,16 @@ public class BikeBean {
         try {
             FTPClient ftp = new FTPClient();
             ftp.connect("ftp.amociclismo.com.br");
+            
+            //Verifico se o host é valido e faço login
             if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
                 ftp.login("amocicli", "Am326@CL80");
                 
+                //Altero o diretório corrente
                 ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
                 returnCode = ftp.getReplyCode();
                 
+                //Verifico se o diretório não existe e crio
                 if(returnCode == 550){
                     ftp.makeDirectory("/public_html/Imagens/bikes/" + bike.getId());
                     ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
@@ -181,8 +185,9 @@ public class BikeBean {
                     ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
                 }
                 
-                System.out.println("Diretorio corrente: " + ftp.printWorkingDirectory());
+                
                 ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                
                 ftp.storeFile(file.getFileName(), file.getInputstream());
 
                 ftp.disconnect();
