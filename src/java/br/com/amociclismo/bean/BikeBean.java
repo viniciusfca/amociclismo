@@ -249,6 +249,13 @@ public class BikeBean {
             } else {
                 habAddFotos = false;
             }
+            
+            
+            
+            
+            
+            
+            
         } else {
             Util.saveMessage("Atenção", "Falha ao excluir a imagem.");
         }
@@ -267,6 +274,7 @@ public class BikeBean {
             Util.saveMessage("Sucesso!", "Bicicleta cadastrada com sucesso.");
             bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
             habilitarBO = false;
+            habAddFotos = false;
             boletins = boletimDAO.getListaBoletim(bike.getId());
 
         } else {

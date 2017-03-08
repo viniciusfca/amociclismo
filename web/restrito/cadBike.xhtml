@@ -37,14 +37,17 @@
 
                 <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
 
-                    <p:dialog style="background: transparent;box-shadow: none" widgetVar="dlgImages" id="dlgImages" width="650" height="650" modal="false"
-                              draggable="false" resizable="false">
-
+                    <p:dialog style="box-shadow: none;"  widgetVar="dlgImages" id="dlgImages"  modal="true"
+                              draggable="false" resizable="false" responsive="true" appendTo="@(body)">
+                        
                         <p:imageSwitch effect="fade">
                             <ui:repeat value="#{bikeMB.images}" var="im">
-                                <p:graphicImage url="#{im.url}" width="550" height="550" />
+                                
+                                <p:graphicImage url="#{im.url}" style="text-align: center"/>
+                                  
                             </ui:repeat>
                         </p:imageSwitch>
+                         
                     </p:dialog>
 
                     <p:dialog resizable="false" id="dlgTransferencia" widgetVar="dlgTransferencia" width="600" >
@@ -180,7 +183,7 @@
 
 
                                     <div class="col-lg-2">
-                                        <p:outputLabel value="Chassi:" style="display: block"/>
+                                        <p:outputLabel value="Quadro:" style="display: block"/>
                                         <p:inputMask mask="9?999999999999" value="#{bikeMB.bike.chassi}">
 
                                         </p:inputMask>
@@ -207,7 +210,7 @@
                                     </div>
 
                                     <div class="col-lg-2">
-                                        <p:outputLabel value="Velocidade:" style="display: block"/>
+                                        <p:outputLabel value="Marchas:" style="display: block"/>
                                         <p:inputText value="#{bikeMB.bike.velocidades}"/>
                                     </div>
 
