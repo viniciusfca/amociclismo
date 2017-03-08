@@ -11,7 +11,17 @@
         <div class="main" >
             <center>
                 <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
-                    
+
+                    <p:dialog style="background: transparent;box-shadow: none" widgetVar="dlgImages" id="dlgImages" width="650" height="650" modal="false"
+                              draggable="false" resizable="false">
+
+                        <p:imageSwitch effect="fade">
+                            <ui:repeat value="#{buscaBikeMB.images}" var="im">
+                                <p:graphicImage url="#{im.url}" width="550" height="550" />
+                            </ui:repeat>
+                        </p:imageSwitch>
+                    </p:dialog>
+
                     <p:dialog id="dlgExcluir" widgetVar="dlgExcluir" closable="false" style="background: transparent; box-shadow: none">
                         <div class="panel panel-primary" style="font-size: 11px;width: 100%;"  >
                             <div class="panel-heading" >
@@ -27,7 +37,7 @@
                                     <div class="col-lg-3">
                                         <p:commandButton styleClass="btn-menu" action="#{buscaBikeMB.excluirBike()}" disabled="#{buscaBikeMB.habiliarExcluir}" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}" update="formCadastro" value="SIM"/>
                                     </div>
-                                    
+
                                     <div class="col-lg-3" style="margin-left: 25%">
                                         <p:commandButton styleClass="btn-menu" onclick="PF('dlgExcluir').hide()" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}" update="formCadastro" value="NÃO"/>
                                     </div>
@@ -37,7 +47,7 @@
 
                         </div>
                     </p:dialog>
-                    
+
                     <p:dialog resizable="false" id="dlgBuscaUsuario" widgetVar="dlgBuscaBike" width="800" >
                         <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
                             <div class="panel-heading" >
@@ -133,7 +143,7 @@
                                             <div class="col-lg-2">
                                                 <p:commandButton styleClass="btn-menu" icon="ui-icon-search" onclick="PF('dlgBuscaBike').show()" value="Pesquisar"/>
                                             </div>
-                                            
+
                                             <div class="col-lg-2">
                                                 <p:commandButton type="button" styleClass="btn-menu" onclick="PF('dlgExcluir').show()"  disabled="#{buscaBikeMB.habiliarExcluir}" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}" update="formCadastro" value="Excluir"/>
                                             </div>
@@ -180,18 +190,18 @@
                                         <p:outputLabel value="Endereço:" style="display: block"/>
                                         <p:inputText style="width: 100%" readonly="true" value="#{buscaBikeMB.bike.usuario.endereco}"/>
                                     </div>
-                                    
-                                   
+
+
                                     <div class="col-lg-1">
                                         <p:outputLabel value="Número:" style="display: block"/>
                                         <p:inputText style="width: 100%" readonly="true" value="#{buscaBikeMB.bike.usuario.numero}"/>
                                     </div>
-                                    
+
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Complemento:" style="display: block"/>
                                         <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.complemento}"/>
                                     </div>
-                                    
+
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Bairro:" style="display: block"/>
                                         <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.bairro}"/>
@@ -201,18 +211,18 @@
                                         <p:outputLabel value="Cidade:" style="display: block"/>
                                         <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.cidade}"/>
                                     </div>
-                                    
+
                                     <div class="col-lg-1" >
                                         <p:outputLabel value="Estado:" style="display: block"/>
                                         <p:inputText readonly="true" style="width: 100%" value="#{buscaBikeMB.bike.usuario.uf}"/>  
                                     </div>
-                                    
+
                                     <div class="col-lg-1" >
                                         <p:outputLabel value="CEP:" style="display: block"/>
                                         <p:inputMask mask="99.999-999" readonly="true" style="width: 110%" value="#{buscaBikeMB.bike.usuario.cep}"/>  
                                     </div>
-                                    
-                                    
+
+
 
                                 </div>
 
@@ -233,8 +243,8 @@
                                     </div>
 
                                 </div>
-                                
-                                
+
+
                                 <p:separator/>
 
                                 <div class="row" style="margin-top: 1%">
@@ -297,6 +307,37 @@
                                     </div>
 
                                 </div>
+
+
+                                <p:separator/>
+
+                                
+                                <p:commandButton styleClass="btn-menu" value="Visualizar Fotos" disabled="#{buscaBikeMB.habViewFotos}" type="button" onclick="PF('dlgImages').show()" update="formCadastro"/>
+
+                                <center>
+                                    <div style="width: 700px">
+                                        <p:dataTable  value="#{buscaBikeMB.images}"  var="img" emptyMessage="Nenhuma foto foi encontrada." style="margin-top: 1%; text-align: center">
+                                            <f:facet name="header">
+                                                Fotos
+                                            </f:facet>
+
+                                            <p:column width="10">
+
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <img src="#{img.url}" style="width: 130px; height: 130px"/>
+                                                    </div>
+
+                                                    <div class="col-lg-6" style="margin-top: 5%;">
+                                                        <p:commandButton action="#{buscaBikeMB.excluirImage(img.id)}" value="Excluir" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}" update="formCadastro" styleClass="btn-menu" icon="ui-icon-closethick" />
+                                                    </div>
+                                                </div>
+
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </div>
+                                </center>
 
                                 <p:separator/>
 <!--                                <p:commandButton disabled="#{bikeMB.habilitarBO}"  onclick="PF('dlgBoletim').show();" styleClass="btn-menu"  value="Adicionar"/>-->

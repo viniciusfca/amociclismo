@@ -7,9 +7,11 @@ package br.com.amociclismo.bean;
 
 import br.com.amociclismo.dao.BikeDAO;
 import br.com.amociclismo.dao.BoletimDAO;
+import br.com.amociclismo.dao.ImageBikeDAO;
 import br.com.amociclismo.dao.UsuarioDAO;
 import br.com.amociclismo.entity.Bike;
 import br.com.amociclismo.entity.Boletim;
+import br.com.amociclismo.entity.ImageBike;
 import br.com.amociclismo.entity.Usuario;
 import br.com.amociclismo.util.Util;
 import java.util.ArrayList;
@@ -28,32 +30,62 @@ public class buscaBikeBean {
     
     private Bike bike;
     private Usuario usuario;
+    private ImageBike image;
     
     private List<Bike> bikes;
     private List<Boletim> boletins;
+    private List<ImageBike> images;
     
     private BikeDAO bikeDAO;
     private UsuarioDAO usuarioDAO;
     private BoletimDAO boletimDAO;
+    private ImageBikeDAO imageBikeDAO;
     
     private String valorPesquisa;
     private String tipoPesquisa;
     
     private boolean habiliarExcluir = true;
+    private boolean habViewFotos = true;
 
     public buscaBikeBean() {
         this.bike = new Bike();
         bike.setUsuario(new Usuario());
         this.usuario = new Usuario();
+        image = new ImageBike();
+        
         this.bikes = new ArrayList<>();
         this.boletins = new ArrayList<>();
+        images = new ArrayList<ImageBike>();
         
         
         usuarioDAO =  new UsuarioDAO();
         bikeDAO = new BikeDAO();
         boletimDAO = new BoletimDAO();
+        imageBikeDAO = new ImageBikeDAO();
+
         
         tipoPesquisa = "3";
+    }
+    
+    
+    /**
+     * Meotodo que exclui image da bike
+     * @param idImage
+     */
+    public void excluirImage(int idImage) {
+        if (imageBikeDAO.excluir(idImage)) {
+            Util.saveMessage("Sucesso!", "Imagem excluída com sucesso.");
+            images = imageBikeDAO.listar(bike.getId());
+
+            if (images.size() > 0) {
+                habViewFotos = false;
+            } else {
+                habViewFotos = true;
+            }
+            
+        } else {
+            Util.saveMessage("Atenção", "Falha ao excluir a imagem.");
+        }
     }
     
     /**
@@ -117,6 +149,13 @@ public class buscaBikeBean {
         tipoPesquisa = "3";
         bikes.clear();
         habiliarExcluir = false;
+        
+        images = imageBikeDAO.listar(bike.getId());
+        if (images.size() > 0) {
+                habViewFotos = false;
+            } else {
+                habViewFotos = true;
+            }
     }
 
     public Usuario getUsuario() {
@@ -165,6 +204,30 @@ public class buscaBikeBean {
 
     public void setHabiliarExcluir(boolean habiliarExcluir) {
         this.habiliarExcluir = habiliarExcluir;
+    }
+
+    public ImageBike getImage() {
+        return image;
+    }
+
+    public void setImage(ImageBike image) {
+        this.image = image;
+    }
+
+    public List<ImageBike> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageBike> images) {
+        this.images = images;
+    }
+
+    public boolean isHabViewFotos() {
+        return habViewFotos;
+    }
+
+    public void setHabViewFotos(boolean habViewFotos) {
+        this.habViewFotos = habViewFotos;
     }
     
     

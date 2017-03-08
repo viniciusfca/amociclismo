@@ -7,8 +7,10 @@ package br.com.amociclismo.bean;
 
 import br.com.amociclismo.dao.BikeDAO;
 import br.com.amociclismo.dao.BoletimDAO;
+import br.com.amociclismo.dao.ImageBikeDAO;
 import br.com.amociclismo.entity.Bike;
 import br.com.amociclismo.entity.Boletim;
+import br.com.amociclismo.entity.ImageBike;
 import br.com.amociclismo.util.Util;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,18 +34,23 @@ public class BikeBean {
 
     private Bike bike;
     private Boletim boletim;
+    private ImageBike image;
 
     private BikeDAO bikeDAO;
     private BoletimDAO boletimDAO;
+    private ImageBikeDAO imageBikeDAO;
 
     private int idBike = 0;
 
     private String cpfTransferencia;
 
     private boolean habilitarBO = true;
+    private boolean habViewFotos = true;
+    private boolean habAddFotos = true;
 
     private List<Boletim> boletins;
     private List<Bike> bikes;
+    private List<ImageBike> images;
 
     /**
      * Construtor
@@ -51,11 +58,14 @@ public class BikeBean {
     public BikeBean() {
         bikeDAO = new BikeDAO();
         boletimDAO = new BoletimDAO();
+        imageBikeDAO = new ImageBikeDAO();
 
         bike = new Bike();
         boletim = new Boletim();
+        image = new ImageBike();
 
         boletins = new ArrayList<Boletim>();
+        images = new ArrayList<ImageBike>();
         bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
     }
 
@@ -141,7 +151,6 @@ public class BikeBean {
                 if (fileUploadEvent.getFile().getFileName().trim().length() > 0) {
                     try {
                         UploadedFile file = fileUploadEvent.getFile();
-//                        System.out.println("Arquivo: " + file.getFileName() + "Tamanho: " + file.getSize() );
                         enviarFtp(file);
                     } catch (Exception e) {
                         throw new Exception(e.getMessage());
@@ -168,36 +177,80 @@ public class BikeBean {
         try {
             FTPClient ftp = new FTPClient();
             ftp.connect("ftp.amociclismo.com.br");
-            
+
             //Verifico se o host é valido e faço login
             if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
                 ftp.login("amocicli", "Am326@CL80");
-                
+
                 //Altero o diretório corrente
                 ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
                 returnCode = ftp.getReplyCode();
-                
+
                 //Verifico se o diretório não existe e crio
-                if(returnCode == 550){
+                if (returnCode == 550) {
                     ftp.makeDirectory("/public_html/Imagens/bikes/" + bike.getId());
                     ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
-                }else{
+                } else {
                     ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
                 }
-                
-                
-                ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
-                
-                ftp.storeFile(file.getFileName(), file.getInputstream());
 
+                ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                ftp.storeFile(file.getFileName(), file.getInputstream());
                 ftp.disconnect();
+               
+                ImageBike img = new ImageBike();
                 
+                img.setIdBike(bike.getId());
+                img.setUrl("http://www.amociclismo.com.br/Imagens/bikes/" + bike.getId() + "/" + file.getFileName());
+                img = imageBikeDAO.inserir(img, bike.getId());
+
+                images = imageBikeDAO.listar(bike.getId());
+
+                if (images.size() > 0) {
+                    habViewFotos = false;
+                } else {
+                    habViewFotos = true;
+                }
+
+                if (images.size() == 3) {
+                    habAddFotos = true;
+                } else {
+                    habAddFotos = false;
+                }
+
                 RequestContext.getCurrentInstance().execute("PF('dlgUploadImagem').hide()");
                 Util.saveMessage("Sucesso", "Imagens enviadas com sucesso.");
+
+                RequestContext.getCurrentInstance().update("formCadastro");
+
             }
 
         } catch (Exception e) {
             Util.saveMessage("Falha ao enviar imagem.", "Motivo: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Meotodo que exclui image da bike
+     */
+    public void excluirImage(int idImage) {
+        if (imageBikeDAO.excluir(idImage)) {
+            Util.saveMessage("Sucesso!", "Imagem excluída com sucesso.");
+            images = imageBikeDAO.listar(bike.getId());
+
+            if (images.size() > 0) {
+                habViewFotos = false;
+            } else {
+                habViewFotos = true;
+            }
+
+            if (images.size() == 3) {
+                habAddFotos = true;
+            } else {
+                habAddFotos = false;
+            }
+        } else {
+            Util.saveMessage("Atenção", "Falha ao excluir a imagem.");
         }
     }
 
@@ -289,6 +342,19 @@ public class BikeBean {
         this.bike = bike;
         habilitarBO = false;
         boletins = boletimDAO.getListaBoletim(bike.getId());
+        images = imageBikeDAO.listar(bike.getId());
+
+        if (images.size() > 0) {
+            habViewFotos = false;
+        } else {
+            habViewFotos = true;
+        }
+
+        if (images.size() == 3) {
+            habAddFotos = true;
+        } else {
+            habAddFotos = false;
+        }
     }
 
     public boolean isHabilitarBO() {
@@ -340,6 +406,38 @@ public class BikeBean {
 
     public void setCpfTransferencia(String cpfTransferencia) {
         this.cpfTransferencia = cpfTransferencia;
+    }
+
+    public ImageBike getImage() {
+        return image;
+    }
+
+    public void setImage(ImageBike image) {
+        this.image = image;
+    }
+
+    public List<ImageBike> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageBike> images) {
+        this.images = images;
+    }
+
+    public boolean isHabViewFotos() {
+        return habViewFotos;
+    }
+
+    public void setHabViewFotos(boolean habViewFotos) {
+        this.habViewFotos = habViewFotos;
+    }
+
+    public boolean isHabAddFotos() {
+        return habAddFotos;
+    }
+
+    public void setHabAddFotos(boolean habAddFotos) {
+        this.habAddFotos = habAddFotos;
     }
 
 }

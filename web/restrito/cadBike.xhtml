@@ -9,33 +9,43 @@
 
     <ui:define name="content" >
         <div class="main" >
-            
+
             <h:form  id="frmUpdate" enctype="multipart/form-data">
-                    <p:dialog closable="false" id="dlgUploadImagem" widgetVar="dlgUploadImagem" width="650px" height="250px" style="background: transparent;box-shadow: none">
+                <p:dialog closable="true" id="dlgUploadImagem" widgetVar="dlgUploadImagem" width="650px" height="250px" style="background: transparent;box-shadow: none">
 
 
-                        <div class="panel panel-primary" style="font-size: 11px;width: 100%;"  >
-                            <div class="panel-heading" >
-                                <b>FOTOS</b>
-                            </div>
+                    <div class="panel panel-primary" style="font-size: 11px;width: 100%;"  >
+                        <div class="panel-heading" >
+                            <b>FOTOS</b>
+                        </div>
 
-                            <div class="panel" style="height: 10px;">
-                                
-                            </div>
-
-                            <div class="panel-body" style="margin-top: -1.3%">
-                                <p:fileUpload label="Selecionar Arquivo" update="messages" auto="true" allowTypes="/(\.|\/)(jpe?g|png)$/" sizeLimit="400000" 
-                                              fileUploadListener="#{bikeMB.upload}" fileLimit="4" invalidSizeMessage="Imagem excedeu o tamanho permitido." fileLimitMessage="Você só pode enviar 3 imagens." invalidFileMessage="Arquivo não suportado." multiple="true" mode="advanced" style="width: 100%"/>
-                                <p:growl id="messages" showDetail="true" />
-                            </div>
+                        <div class="panel" style="height: 10px;">
 
                         </div>
-                    </p:dialog>
-                </h:form>
-            
+
+                        <div class="panel-body" style="margin-top: -1.3%">
+                            <p:fileUpload label="Selecionar Arquivo" update="messages" auto="true" allowTypes="/(\.|\/)(jpe?g|png)$/" sizeLimit="400000" 
+                                          fileUploadListener="#{bikeMB.upload}" fileLimit="4" invalidSizeMessage="Imagem excedeu o tamanho permitido." fileLimitMessage="Você só pode enviar 3 imagens." invalidFileMessage="Arquivo não suportado." multiple="true" mode="advanced" style="width: 100%"/>
+                            <p:growl id="messages" showDetail="true" />
+                        </div>
+
+                    </div>
+                </p:dialog>
+            </h:form>
+
             <center>
 
                 <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
+
+                    <p:dialog style="background: transparent;box-shadow: none" widgetVar="dlgImages" id="dlgImages" width="650" height="650" modal="false"
+                              draggable="false" resizable="false">
+
+                        <p:imageSwitch effect="fade">
+                            <ui:repeat value="#{bikeMB.images}" var="im">
+                                <p:graphicImage url="#{im.url}" width="550" height="550" />
+                            </ui:repeat>
+                        </p:imageSwitch>
+                    </p:dialog>
 
                     <p:dialog resizable="false" id="dlgTransferencia" widgetVar="dlgTransferencia" width="600" >
                         <div class="panel panel-info" style="font-size: 11px;width: 100%;"  >
@@ -158,10 +168,6 @@
                                                 <p:commandButton styleClass="btn-menu" value="Transferir Bicicleta"  disabled="#{bikeMB.habilitarBO}"  type="button" onclick="PF('dlgTransferencia').show()" update="formCadastro"/>
                                             </div>
 
-<!--                                            <div class="col-lg-2">
-                                                <p:commandButton styleClass="btn-menu" value="Enviar fotos" disabled="#{bikeMB.habilitarBO}" type="button" onclick="PF('dlgUploadImagem').show()" update="formCadastro"/>
-                                            </div>-->
-
                                         </div>
 
                                     </div>
@@ -227,6 +233,40 @@
                                     </div>
 
                                 </div>
+
+
+
+                                <p:separator/>
+
+                                <p:commandButton styleClass="btn-menu" value="Adicionar fotos" disabled="#{bikeMB.habAddFotos}" type="button" onclick="PF('dlgUploadImagem').show()" update="formCadastro"/>
+
+                                <p:commandButton styleClass="btn-menu" value="Visualizar Fotos" disabled="#{bikeMB.habViewFotos}" type="button" onclick="PF('dlgImages').show()" update="formCadastro"/>
+
+                                <center>
+                                    <div style="width: 700px">
+                                        <p:dataTable  value="#{bikeMB.images}"  var="img" emptyMessage="Nenhuma foto foi encontrada." style="margin-top: 1%; text-align: center">
+                                            <f:facet name="header">
+                                                Fotos
+                                            </f:facet>
+
+                                            <p:column width="10">
+
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <img src="#{img.url}" style="width: 130px; height: 130px"/>
+                                                    </div>
+
+                                                    <div class="col-lg-6" style="margin-top: 5%;">
+                                                        <p:commandButton action="#{bikeMB.excluirImage(img.id)}" value="Excluir" update="formCadastro" styleClass="btn-menu" icon="ui-icon-closethick" />
+                                                    </div>
+                                                </div>
+
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </div>
+                                </center>
+
 
                                 <p:separator/>
                                 <p:commandButton disabled="#{bikeMB.habilitarBO}"  onclick="PF('dlgBoletim').show();" styleClass="btn-menu"  value="Adicionar"/>
