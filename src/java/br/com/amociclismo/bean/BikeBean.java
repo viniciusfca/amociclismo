@@ -10,11 +10,17 @@ import br.com.amociclismo.dao.BoletimDAO;
 import br.com.amociclismo.entity.Bike;
 import br.com.amociclismo.entity.Boletim;
 import br.com.amociclismo.util.Util;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -31,7 +37,7 @@ public class BikeBean {
     private BoletimDAO boletimDAO;
 
     private int idBike = 0;
-    
+
     private String cpfTransferencia;
 
     private boolean habilitarBO = true;
@@ -90,37 +96,103 @@ public class BikeBean {
             Util.saveMessage("Atenção", "O campo Velocidades é obrigatório.");
             msg += "Erro";
         }
-        
-        if(!bikeByChassi().equals("")){
+
+        if (!bikeByChassi().equals("")) {
             msg += "Erro";
         }
 
         return msg;
     }
-    
+
     /**
      * Metodo que transfere bike
      */
-    public void transferirBike(){
-       String retorno = bikeDAO.transferirBike(cpfTransferencia, bike.getUsuario().getId() , bike.getId());
-       
-       if(!retorno.equals("Não existe usuário cadastrado para o CPF informado.")){
-           Util.saveMessage("Sucesso", "Sua Bicicleta foi transferida para: " + retorno);
-           bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
-       }else{
-           Util.saveMessage("Atenção!", retorno);
-           retorno = "";
-       }
+    public void transferirBike() {
+        String retorno = bikeDAO.transferirBike(cpfTransferencia, bike.getUsuario().getId(), bike.getId());
+
+        if (!retorno.equals("Não existe usuário cadastrado para o CPF informado.")) {
+            Util.saveMessage("Sucesso", "Sua Bicicleta foi transferida para: " + retorno);
+            bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
+        } else {
+            Util.saveMessage("Atenção!", retorno);
+            retorno = "";
+        }
     }
-    
+
     /**
      * Metodo que chama dialog com o termo de responsabilidade
      */
-    public void aceitarTermo(){
-        if(bike.getId() > 0 ){
+    public void aceitarTermo() {
+        if (bike.getId() > 0) {
             salvarBike();
-        }else{
+        } else {
             RequestContext.getCurrentInstance().execute("PF('dlgTermo').show()");
+        }
+    }
+
+    /**
+     * Metodo que faz o upload do arquivo
+     *
+     * @param fileUploadEvent
+     */
+    public void upload(FileUploadEvent fileUploadEvent) {
+        try {
+            if (fileUploadEvent.getFile() != null) {
+                if (fileUploadEvent.getFile().getFileName().trim().length() > 0) {
+                    try {
+                        UploadedFile file = fileUploadEvent.getFile();
+//                        System.out.println("Arquivo: " + file.getFileName() + "Tamanho: " + file.getSize() );
+                        enviarFtp(file);
+                    } catch (Exception e) {
+                        throw new Exception(e.getMessage());
+                    }
+                } else {
+                    throw new Exception("Nenhum arquivo selecionado");
+                }
+            } else {
+                throw new Exception("Nenhum arquivo selecionado");
+            }
+        } catch (Exception e) {
+            Util.saveMessage("Erro", e.getMessage());
+        }
+    }
+
+    /**
+     * Meotodo que envia arquivo via ftp
+     *
+     * @param file
+     */
+    public void enviarFtp(UploadedFile file) {
+        System.out.println("Chegou aqui: " + file.getFileName());
+        int returnCode = 0;
+        try {
+            FTPClient ftp = new FTPClient();
+            ftp.connect("ftp.amociclismo.com.br");
+            if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                ftp.login("amocicli", "Am326@CL80");
+                
+                ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
+                returnCode = ftp.getReplyCode();
+                
+                if(returnCode == 550){
+                    ftp.makeDirectory("/public_html/Imagens/bikes/" + bike.getId());
+                    ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
+                }else{
+                    ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
+                }
+                
+                System.out.println("Diretorio corrente: " + ftp.printWorkingDirectory());
+                ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                ftp.storeFile(file.getFileName(), file.getInputstream());
+
+                ftp.disconnect();
+                
+                RequestContext.getCurrentInstance().execute("PF('dlgUploadImagem').hide()");
+                Util.saveMessage("Sucesso", "Imagens enviadas com sucesso.");
+            }
+
+        } catch (Exception e) {
+            Util.saveMessage("Falha ao enviar imagem.", "Motivo: " + e.getMessage());
         }
     }
 
@@ -128,8 +200,7 @@ public class BikeBean {
      * Metodo que salva uma nova bicicleta
      */
     public void salvarBike() {
-        
-        
+
         if (validarCampos().equals("")) {
             bike = bikeDAO.inserirBike(bike);
         }
@@ -140,7 +211,7 @@ public class BikeBean {
             habilitarBO = false;
             boletins = boletimDAO.getListaBoletim(bike.getId());
 
-        }else{
+        } else {
             Util.saveMessage("Atenção!", "Falha ao cadastrar a bicicleta.");
         }
     }
@@ -170,7 +241,7 @@ public class BikeBean {
         } else if (bike.getId() > 0 && bike.getUsuario().getId() != Util.getUsuarioLogado().getId()) {
             Util.saveMessage("Atenção", "Essa bicicleta já está cadastrada para outro usuário.");
             bike = new Bike();
-            erro =  "Você já cadastrou essa bicicleta.";
+            erro = "Você já cadastrou essa bicicleta.";
         } else {
             bike = new Bike();
             bike = bikeAux;
@@ -192,15 +263,16 @@ public class BikeBean {
         }
 
     }
-    
+
     /**
      * Metodo que exclui boletim
-     * @param idBoletim 
+     *
+     * @param idBoletim
      */
-    public void deletarBoletim(int idBoletim){
+    public void deletarBoletim(int idBoletim) {
         boletimDAO.deletarBoletim(idBoletim);
         boletins = boletimDAO.getListaBoletim(bike.getId());
-        
+
         Util.saveMessage("Sucesso", "Boletim excluído com sucesso!");
     }
 
@@ -264,6 +336,5 @@ public class BikeBean {
     public void setCpfTransferencia(String cpfTransferencia) {
         this.cpfTransferencia = cpfTransferencia;
     }
-    
-    
+
 }

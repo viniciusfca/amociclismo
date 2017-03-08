@@ -333,7 +333,6 @@ public class Util {
 
                 email.setFrom("suporte@amociclismo.com.br", "AMO CICLISMO");
                 email.setSubject("Recuperação de Senha - AMO CICLISMO");
-
                 String emailBody = "<html>\n"
                         + "<head>\n"
                         + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>"
