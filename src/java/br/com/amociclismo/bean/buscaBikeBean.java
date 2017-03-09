@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -71,11 +73,45 @@ public class buscaBikeBean {
     /**
      * Meotodo que exclui image da bike
      * @param idImage
+     * @param url
      */
-    public void excluirImage(int idImage) {
+    public void excluirImage(int idImage, String url) {
         if (imageBikeDAO.excluir(idImage)) {
             Util.saveMessage("Sucesso!", "Imagem excluída com sucesso.");
             images = imageBikeDAO.listar(bike.getId());
+            
+            try {
+             
+            int returnCode = 0;    
+            FTPClient ftp = new FTPClient();
+            ftp.connect("ftp.amociclismo.com.br");
+
+            //Verifico se o host é valido e faço login
+            if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                ftp.login("amocicli", "Am326@CL80");
+
+                //Altero o diretório corrente
+                ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
+
+                ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                ftp.deleteFile("/public_html"+url);
+                ftp.disconnect();
+                
+                images = imageBikeDAO.listar(bike.getId());
+
+                if (images.size() > 0) {
+                    habViewFotos = false;
+                } else {
+                    habViewFotos = true;
+                }
+
+                RequestContext.getCurrentInstance().update("formCadastro");
+
+            }
+
+        } catch (Exception e) {
+            Util.saveMessage("Falha ao excluir imagem.", "Motivo: " + e.getMessage());
+        }
 
             if (images.size() > 0) {
                 habViewFotos = false;

@@ -6,6 +6,7 @@
 package br.com.amociclismo.dao;
 
 import br.com.amociclismo.entity.Bike;
+import br.com.amociclismo.entity.ImageBike;
 import br.com.amociclismo.entity.Usuario;
 import br.com.amociclismo.util.Conexao;
 import br.com.amociclismo.util.Util;
@@ -14,6 +15,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -170,48 +174,46 @@ public class BikeDAO {
 
         return b;
     }
-    
+
     /**
      * Metodo que efetua a transferência da bike
-     * @return 
+     *
+     * @return
      */
-    public String transferirBike(String cpf , int idUsuario, int idBike){
+    public String transferirBike(String cpf, int idUsuario, int idBike) {
         Conexao conexao = new Conexao();
         PreparedStatement ps = null;
         String sql = "UPDATE bike set idUsuario = ? WHERE id = ?";
         String erro = "";
-        
-        try{
-            
-            Usuario usuario =  new Usuario();
+
+        try {
+
+            Usuario usuario = new Usuario();
             UsuarioDAO usuarioDAO = new UsuarioDAO();
             usuario = usuarioDAO.getUsuarioByCpf(Util.retirarPontos(cpf));
-            
-            if(usuario.getId() > 0 ){
+
+            if (usuario.getId() > 0) {
                 ps = conexao.conectar().prepareStatement(sql);
-                ps.setInt(1,usuario.getId());
+                ps.setInt(1, usuario.getId());
                 ps.setInt(2, idBike);
-                
+
                 ps.executeUpdate();
-                
-                
-                TransferenciaDAO transfDAO  = new TransferenciaDAO();
+
+                TransferenciaDAO transfDAO = new TransferenciaDAO();
                 transfDAO.inserirLogTransferencia(idUsuario, idBike);
-                
+
                 erro = usuario.getNome();
-            }else{
+            } else {
                 erro = "Não existe usuário cadastrado para o CPF informado.";
             }
-           
-            
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
             erro = e.getMessage();
-        }finally{
+        } finally {
             conexao.desconectar();
         }
-        
+
         return erro;
     }
 
@@ -259,31 +261,101 @@ public class BikeDAO {
 
         return bikes;
     }
-    
+
     /**
      * Metodo que excluir bike
+     *
      * @param idBike
-     * @return 
+     * @return
      */
-    public boolean excluirBike(int idBike){
-        Conexao conexao =  new Conexao();
+    public boolean excluirBike(int idBike) {
+        Conexao conexao = new Conexao();
         PreparedStatement ps = null;
         boolean retorno;
-        String sql ="DELETE FROM bike where id = ?";
-        
-        try{
+        String sql = "DELETE FROM bike where id = ?";
+
+        try {
             ps = conexao.conectar().prepareStatement(sql);
             ps.setInt(1, idBike);
             ps.executeUpdate();
-            
+
             retorno = true;
-        }catch(Exception e){
-            retorno =  false;
+        } catch (Exception e) {
+            retorno = false;
             System.out.println("Erro: " + e.getMessage());
-        }finally{
+        } finally {
             conexao.desconectar();
         }
-        
+
+        return retorno;
+    }
+
+    /**
+     * Metodo que excluir bike
+     *
+     * @param idUsuario
+     * @param idBike
+     * @return
+     */
+    public boolean excluirBikes(int idUsuario) {
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        boolean retorno;
+        String sql = "DELETE FROM bike where idUsuario = ?";
+
+        try {
+
+            BikeDAO bikeDAO = new BikeDAO();
+
+            for (Bike b : bikeDAO.getBikesByIdUsuario(idUsuario)) {
+                ImageBikeDAO imgDAO = new ImageBikeDAO();
+                
+                BoletimDAO boDAO =  new BoletimDAO();
+                boDAO.deletarBoletimByBike(b.getId());
+                
+                for (ImageBike img : imgDAO.listar(b.getId())) {
+
+                    try {
+
+                        int returnCode = 0;
+                        FTPClient ftp = new FTPClient();
+                        ftp.connect("ftp.amociclismo.com.br");
+
+                        //Verifico se o host é valido e faço login
+                        if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                            ftp.login("amocicli", "Am326@CL80");
+
+                            //Altero o diretório corrente
+                            ftp.changeWorkingDirectory("/public_html/Imagens/" + img.getIdBike());
+
+                            ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                            ftp.deleteFile("/public_html" + img.getUrl());
+                            ftp.disconnect();
+
+                            RequestContext.getCurrentInstance().update("formCadastro");
+
+                        }
+
+                    } catch (Exception e) {
+                        Util.saveMessage("Falha ao excluir imagem.", "Motivo: " + e.getMessage());
+                    }
+
+                    imgDAO.excluir(img.getId());
+                }
+            }
+
+            ps = conexao.conectar().prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            ps.executeUpdate();
+            retorno = true;
+
+        } catch (Exception e) {
+            retorno = false;
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
         return retorno;
     }
 

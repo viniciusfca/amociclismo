@@ -10,7 +10,7 @@ package br.com.amociclismo.entity;
  * @author vinicius
  */
 public class Patrocinio {
-    
+    private int id;
     private String nome;
     private String url;
     private String urlImage;
@@ -37,6 +37,14 @@ public class Patrocinio {
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     

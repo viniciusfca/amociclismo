@@ -183,7 +183,7 @@ public class BikeBean {
                 ftp.login("amocicli", "Am326@CL80");
 
                 //Altero o diretório corrente
-                ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
+                ftp.changeWorkingDirectory("/public_html/Imagens/bikes/" + bike.getId());
                 returnCode = ftp.getReplyCode();
 
                 //Verifico se o diretório não existe e crio
@@ -201,7 +201,7 @@ public class BikeBean {
                 ImageBike img = new ImageBike();
                 
                 img.setIdBike(bike.getId());
-                img.setUrl("http://www.amociclismo.com.br/Imagens/bikes/" + bike.getId() + "/" + file.getFileName());
+                img.setUrl("/Imagens/bikes/" + bike.getId() + "/" + file.getFileName());
                 img = imageBikeDAO.inserir(img, bike.getId());
 
                 images = imageBikeDAO.listar(bike.getId());
@@ -233,7 +233,7 @@ public class BikeBean {
     /**
      * Meotodo que exclui image da bike
      */
-    public void excluirImage(int idImage) {
+    public void excluirImage(int idImage, String url) {
         if (imageBikeDAO.excluir(idImage)) {
             Util.saveMessage("Sucesso!", "Imagem excluída com sucesso.");
             images = imageBikeDAO.listar(bike.getId());
@@ -252,9 +252,44 @@ public class BikeBean {
             
             
             
-            
-            
-            
+            try {
+             
+            int returnCode = 0;    
+            FTPClient ftp = new FTPClient();
+            ftp.connect("ftp.amociclismo.com.br");
+
+            //Verifico se o host é valido e faço login
+            if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                ftp.login("amocicli", "Am326@CL80");
+
+                //Altero o diretório corrente
+                ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
+
+                ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                ftp.deleteFile("/public_html"+url);
+                ftp.disconnect();
+                
+                images = imageBikeDAO.listar(bike.getId());
+
+                if (images.size() > 0) {
+                    habViewFotos = false;
+                } else {
+                    habViewFotos = true;
+                }
+
+                if (images.size() == 3) {
+                    habAddFotos = true;
+                } else {
+                    habAddFotos = false;
+                }
+
+                RequestContext.getCurrentInstance().update("formCadastro");
+
+            }
+
+        } catch (Exception e) {
+            Util.saveMessage("Falha ao enviar imagem.", "Motivo: " + e.getMessage());
+        }
             
         } else {
             Util.saveMessage("Atenção", "Falha ao excluir a imagem.");

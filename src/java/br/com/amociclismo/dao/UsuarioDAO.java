@@ -286,6 +286,11 @@ public class UsuarioDAO {
             
             retorno = true;
             
+            BikeDAO bikeDAO =  new BikeDAO();
+            bikeDAO.excluirBikes(idUsuario);
+            
+            BoletimDAO boDAO =  new BoletimDAO();
+            
             
         }catch(Exception e){
             System.out.println("Erro: " + e.getMessage());

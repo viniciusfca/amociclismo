@@ -68,6 +68,8 @@ public class ImageBikeDAO {
             ps.executeUpdate();
             
             retorno  = true;
+            
+            
         }catch(Exception e){
             retorno = false;
             System.out.println("Erro: " + e.getMessage());

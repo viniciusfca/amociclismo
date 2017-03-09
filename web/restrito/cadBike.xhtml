@@ -37,14 +37,12 @@
 
                 <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
 
-                    <p:dialog style="box-shadow: none;"  widgetVar="dlgImages" id="dlgImages"  modal="true"
-                              draggable="false" resizable="false" responsive="true" appendTo="@(body)">
+                    <p:dialog style="box-shadow: none;"  width="850" height="650" widgetVar="dlgImages" id="dlgImages"  modal="true"
+                              draggable="false" resizable="false" responsive="false" appendTo="@(body)">
                         
-                        <p:imageSwitch effect="fade">
+                        <p:imageSwitch effect="fade" style="width: auto; height: auto">
                             <ui:repeat value="#{bikeMB.images}" var="im">
-                                
-                                <p:graphicImage url="#{im.url}" style="text-align: center"/>
-                                  
+                                <img src="http://www.amociclismo.com.br#{im.url}" style="max-width: 80%; max-height: 80%; width: auto;height: auto "/>  
                             </ui:repeat>
                         </p:imageSwitch>
                          
@@ -184,9 +182,7 @@
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Quadro:" style="display: block"/>
-                                        <p:inputMask mask="9?999999999999" value="#{bikeMB.bike.chassi}">
-
-                                        </p:inputMask>
+                                        <p:inputText value="#{bikeMB.bike.chassi}"/>
                                     </div>
 
                                     <div class="col-lg-2">
@@ -256,11 +252,11 @@
 
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <img src="#{img.url}" style="width: 130px; height: 130px"/>
+                                                        <img src="http://www.amociclismo.com.br#{img.url}" style="width: 130px; height: 130px"/>
                                                     </div>
 
                                                     <div class="col-lg-6" style="margin-top: 5%;">
-                                                        <p:commandButton action="#{bikeMB.excluirImage(img.id)}" value="Excluir" update="formCadastro" styleClass="btn-menu" icon="ui-icon-closethick" />
+                                                        <p:commandButton action="#{bikeMB.excluirImage(img.id, img.url)}" value="Excluir" update="formCadastro" styleClass="btn-menu" icon="ui-icon-closethick" />
                                                     </div>
                                                 </div>
 

@@ -97,6 +97,7 @@ public class buscaUsuarioBean {
             Util.saveMessage("Sucesso!", "Usuário excluído com sucesso!");
             RequestContext.getCurrentInstance().execute("PF('dlgExcluir').hide()");
             usuario = new Usuario();
+            bike = new Bike();
         }else{
             Util.saveMessage("Atenção", "Falhar ao excluir usuário!");
         }

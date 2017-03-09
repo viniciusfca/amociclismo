@@ -138,5 +138,27 @@ public class BoletimDAO {
             conexao.desconectar();
         }
     }
+    
+    
+   /**
+     * Metodo que exclui boletim de ocorrencia
+     * @param idBike 
+     */
+    public void deletarBoletimByBike(int idBike){
+        Conexao conexao = new Conexao();
+        PreparedStatement ps =  null;
+        String sql = "DELETE FROM boletim WHERE idBike = ?";
+        
+        try{
+            ps = conexao.conectar().prepareStatement(sql);
+            ps.setInt(1, idBike);
+            ps.executeUpdate();
+            
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+        }finally{
+            conexao.desconectar();
+        }
+    }
 
 }
