@@ -268,7 +268,7 @@ public class Util {
 
             String emailBody = "<html>\n"
                     + "<head>\n"
-                    + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>"
+                    + "<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>"
                     + "	<title>.::AMO CICLISMO::.</title>\n"
                     + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
                     + "</head>\n"
@@ -335,7 +335,7 @@ public class Util {
                 email.setSubject("Recuperação de Senha - AMO CICLISMO");
                 String emailBody = "<html>\n"
                         + "<head>\n"
-                        + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>"
+                        + "<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>"
                         + "	<title>.::AMO CICLISMO::.</title>\n"
                         + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
                         + "</head>\n"

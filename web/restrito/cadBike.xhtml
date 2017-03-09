@@ -40,9 +40,9 @@
                     <p:dialog style="box-shadow: none;"  width="850" height="650" widgetVar="dlgImages" id="dlgImages"  modal="true"
                               draggable="false" resizable="false" responsive="false" appendTo="@(body)">
                         
-                        <p:imageSwitch effect="fade" style="width: auto; height: auto">
+                        <p:imageSwitch effect="fade" >
                             <ui:repeat value="#{bikeMB.images}" var="im">
-                                <img src="http://www.amociclismo.com.br#{im.url}" style="max-width: 80%; max-height: 80%; width: auto;height: auto "/>  
+                                <img src="http://www.amociclismo.com.br#{im.url}" style="max-width: 800px; max-height: 650px; width: auto;height: auto "/>  
                             </ui:repeat>
                         </p:imageSwitch>
                          
