@@ -37,12 +37,12 @@
 
                 <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
 
-                    <p:dialog style="box-shadow: none;"  width="850" height="650" widgetVar="dlgImages" id="dlgImages"  modal="true"
-                              draggable="false" resizable="false" responsive="false" appendTo="@(body)">
+                    <p:dialog style="box-shadow: none;" width="850" height="620"  widgetVar="dlgImages" id="dlgImages"  modal="true"
+                              draggable="false" resizable="false" responsive="true" appendTo="@(body)">
                         
-                        <p:imageSwitch effect="fade" >
-                            <ui:repeat value="#{bikeMB.images}" var="im">
-                                <img src="http://www.amociclismo.com.br#{im.url}" style="max-width: 800px; max-height: 650px; width: auto;height: auto "/>  
+                        <p:imageSwitch effect="fade" style="width: 800px; height: 600px">
+                            <ui:repeat value="#{bikeMB.images}" var="im" >
+                                <img src="http://www.amociclismo.com.br#{im.url}" style="max-width: 800px; max-height: 600px; width: auto;height: auto "/>  
                             </ui:repeat>
                         </p:imageSwitch>
                          
