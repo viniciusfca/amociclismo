@@ -268,12 +268,12 @@ public class Util {
 
             String emailBody = "<html>\n"
                     + "<head>\n"
-                    + "<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>"
+                    + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
                     + "	<title>.::AMO CICLISMO::.</title>\n"
                     + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
                     + "</head>\n"
                     + "\n"
-                    + "	<body>\n"
+                    + "	<body style='border: 1px solid black'>\n"
                     + "		<div class='panel panel-info' style='font-size: 11px;width: 600px;height: 510px;'  >\n"
                     + "                            <div class='panel-heading' >\n"
                     + "                                <b><center>.::AMO CICLISMO::.</b></center>\n"
@@ -335,12 +335,12 @@ public class Util {
                 email.setSubject("Recuperação de Senha - AMO CICLISMO");
                 String emailBody = "<html>\n"
                         + "<head>\n"
-                        + "<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>"
+                        + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
                         + "	<title>.::AMO CICLISMO::.</title>\n"
                         + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
                         + "</head>\n"
                         + "\n"
-                        + "	<body>\n"
+                        + "	<body style='border: 1px solid black'>\n"
                         + "		<div class='panel panel-info' style='font-size: 11px;width: 600px;height: 510px;'  >\n"
                         + "                            <div class='panel-heading' >\n"
                         + "                                <b><center>.::AMO CICLISMO::.</b></center>\n"
@@ -380,6 +380,76 @@ public class Util {
         } else {
             retorno = "O CPF informado não está cadastrado na nossa base.";
         }
+
+        return retorno;
+    }
+    
+    
+    public static String envioPadrao(String nome, String assunto, String emailEnvio, String mensagem) {
+
+            String retorno = "";
+            HtmlEmail email = new HtmlEmail();
+
+
+            email.setHostName("mail.amociclismo.com.br");
+            email.setSmtpPort(587);
+            email.setSSLOnConnect(true);
+            email.setDebug(true);
+            email.setAuthentication("suporte@amociclismo.com.br", "Bike#$AmoBike");
+
+            try {
+                email.addTo("suporte@amociclismo.com.br");
+
+                email.setFrom(emailEnvio, nome);
+                email.setSubject(assunto +  " - FALE CONOSCO AMO CICLISMO");
+                String emailBody = "<html>\n"
+                        + "<head>\n"
+                        + "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>"
+                        + "	<title>.::AMO CICLISMO::.</title>\n"
+                        + "	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' crossorigin='anonymous'>\n"
+                        + "</head>\n"
+                        + "\n"
+                        + "	<body style='border: 1px solid black'>\n"
+                        + "		<div class='panel panel-info' style='font-size: 11px;width: 600px;height: 510px;'  >\n"
+                        + "                            <div class='panel-heading' >\n"
+                        + "                                <b><center>.::AMO CICLISMO::.</b></center>\n"
+                        + "                            </div>\n"
+                        + "\n"
+                        + "                            <div class='panel' style='height: 10px;'>\n"
+                        + "								\n"
+                        + "                            </div>\n"
+                        + "\n"
+                        + "                            <div class='panel-body' style='margin-top: -1.3%'>\n"
+                        + "                                <h3><center>FALE CONOSCO</center></h3>\n"
+                        + "								<h4>\n"
+                        + "                                    <p><b>NOME: " + nome + "<b/></p>\n"
+                        + "                                    <p><b>ASSUNTO:</b> "+assunto+"</p>\n"
+                        + "                                    <p><b>EMAIL:</b> "+emailEnvio+"</p>\n"
+                        + "                                    <p><b>IP:</b> "+getIp()+"</p>\n"
+                        + "                                    <p style='white-space: pre-line;text-align: left'><b>MENSAGEM:</b> "+mensagem+"</p>\n"
+                        + "                                </h4>\n"
+                        + "                                \n"
+                        + "								<img src='http://www.amociclismo.com.br/Imagens/AmoCiclismo.jpg' style='width: 150px; height: 150px; margin-top: 40px'/>\n"
+                        + "								<p style='margin-left: 15px'>Equipe AMO CICLISMO.</p>\n"
+                        + "                            </div>\n"
+                        + "\n"
+                        + "                        </div>\n"
+                        + "	\n"
+                        + "	\n"
+                        + "	</body>\n"
+                        + "</html>";
+                
+                
+                email.setHtmlMsg(emailBody);
+                email.send();
+
+                retorno = "Mensagem enviada com sucesso.";
+
+            } catch (Exception e) {
+                retorno =  "Falha ao enviar mensagem tenta mais tarde.";
+                System.out.println("Erro Falha ao enviar email " + e.getMessage());
+            }
+       
 
         return retorno;
     }

@@ -10,7 +10,9 @@
     <ui:define name="content" >
         <div class="main" >
             <center>
-                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
+                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" onkeypress="if (event.keyCode == 13) {
+                    return false;
+                }">
 
                     <p:dialog  style="box-shadow: none" width="850" height="620"  widgetVar="dlgImages" id="dlgImages"  modal="true"
                               draggable="false" resizable="false" responsive="false" appendTo="@(body)" >
@@ -93,7 +95,7 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-12">
 
-                                        <p:dataTable id="dtBikes" value="#{buscaBikeMB.bikes}" var="b" style="margin-top: 1%;text-align: center" emptyMessage="Nenhuma bicicleta encontrada.">
+                                        <p:dataTable id="dtBikes" value="#{buscaBikeMB.bikes}" var="b" style="margin-top: 1%;text-align: center" emptyMessage="Nenhuma bicicleta encontrada." paginator="true" paginatorTemplate="{PreviousPageLink} {NextPageLink}" paginatorPosition="top" rows="5">
                                             <f:facet  name="header">
                                                 Bicicletas
                                             </f:facet>
@@ -102,19 +104,19 @@
                                                 <p:commandButton action="#{buscaBikeMB.setBike(b)}" update="formCadastro" style="width: 30px;width: 30px" icon="ui-icon-check" />
                                             </p:column>
 
-                                            <p:column headerText="Nome proprietário">
+                                            <p:column headerText="Nome proprietário" sortBy="#{b.usuario.nome}">
                                                 <p:outputLabel value="#{b.usuario.nome}" />
                                             </p:column>
 
-                                            <p:column headerText="Chassi">
+                                            <p:column headerText="Chassi" sortBy="#{b.chassi}">
                                                 <p:outputLabel value="#{b.chassi}"/>
                                             </p:column>
 
-                                            <p:column headerText="Marca">
+                                            <p:column headerText="Marca" sortBy="#{b.marca}">
                                                 <p:outputLabel value="#{b.marca}"/>
                                             </p:column>
 
-                                            <p:column headerText="Cor">
+                                            <p:column headerText="Cor" sortBy="#{b.cores}">
                                                 <p:outputLabel value="#{b.cores}"/>
                                             </p:column>
 
@@ -145,7 +147,11 @@
                                             <div class="col-lg-2">
                                                 <p:commandButton styleClass="btn-menu" icon="ui-icon-search" onclick="PF('dlgBuscaBike').show()" value="Pesquisar"/>
                                             </div>
-
+                                            
+                                            <div class="col-lg-2">
+                                                <p:commandButton  styleClass="btn-menu" action="#{buscaBikeMB.salvarBike()}"  disabled="#{buscaBikeMB.habiliarExcluir}" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}" update="formCadastro" value="Salvar"/>
+                                            </div>
+                                            
                                             <div class="col-lg-2">
                                                 <p:commandButton type="button" styleClass="btn-menu" onclick="PF('dlgExcluir').show()"  disabled="#{buscaBikeMB.habiliarExcluir}" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}" update="formCadastro" value="Excluir"/>
                                             </div>
@@ -163,65 +169,65 @@
                                 <div class="row" style="margin-top: 1%">
                                     <div class="col-lg-4">
                                         <p:outputLabel value="Proprietário:" style="display: block"/>
-                                        <p:inputText readonly="true" style="width: 100%" value="#{buscaBikeMB.bike.usuario.nome}"/>
+                                        <p:inputText  style="width: 100%" value="#{buscaBikeMB.bike.usuario.nome}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="CPF:" style="display: block"/>
-                                        <p:inputMask readonly="true" mask="999.999.999-99" value="#{buscaBikeMB.bike.usuario.cpf}"/>
+                                        <p:inputMask  mask="999.999.999-99" value="#{buscaBikeMB.bike.usuario.cpf}"/>
                                     </div>
 
                                     <div class="col-lg-1">
                                         <p:outputLabel value="RG:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.rg}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.usuario.rg}"/>
                                     </div>
 
                                     <div class="col-lg-1" style="margin-left: 8.5%;">
                                         <p:outputLabel  value="Nascimento:" style="display: block;width: 110%;"/>
-                                        <p:calendar readonly="true"  value="#{buscaBikeMB.bike.usuario.dataNascimento}" showOn="false" mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt" />
+                                        <p:calendar   value="#{buscaBikeMB.bike.usuario.dataNascimento}" showOn="false" mask="99/99/9999"  pattern="dd/MM/yyyy" locale="pt" />
                                     </div>
 
                                     <div class="col-lg-1" style="margin-left: 8%" >
                                         <p:outputLabel value="Sexo:" style="display: block"/>
-                                        <p:inputText readonly="true" style="width: 100%" value="#{buscaBikeMB.bike.usuario.sexo}"/>  
+                                        <p:inputText  style="width: 100%" value="#{buscaBikeMB.bike.usuario.sexo}"/>  
                                     </div>
                                 </div>
 
                                 <div class="row" style="margin-top: 1%">
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Endereço:" style="display: block"/>
-                                        <p:inputText style="width: 100%" readonly="true" value="#{buscaBikeMB.bike.usuario.endereco}"/>
+                                        <p:inputText style="width: 100%"  value="#{buscaBikeMB.bike.usuario.endereco}"/>
                                     </div>
 
 
                                     <div class="col-lg-1">
                                         <p:outputLabel value="Número:" style="display: block"/>
-                                        <p:inputText style="width: 100%" readonly="true" value="#{buscaBikeMB.bike.usuario.numero}"/>
+                                        <p:inputText style="width: 100%"  value="#{buscaBikeMB.bike.usuario.numero}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Complemento:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.complemento}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.usuario.complemento}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Bairro:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.bairro}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.usuario.bairro}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Cidade:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.cidade}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.usuario.cidade}"/>
                                     </div>
 
                                     <div class="col-lg-1" >
                                         <p:outputLabel value="Estado:" style="display: block"/>
-                                        <p:inputText readonly="true" style="width: 100%" value="#{buscaBikeMB.bike.usuario.uf}"/>  
+                                        <p:inputText  style="width: 100%" value="#{buscaBikeMB.bike.usuario.uf}"/>  
                                     </div>
 
                                     <div class="col-lg-1" >
                                         <p:outputLabel value="CEP:" style="display: block"/>
-                                        <p:inputMask mask="99.999-999" readonly="true" style="width: 110%" value="#{buscaBikeMB.bike.usuario.cep}"/>  
+                                        <p:inputMask mask="99.999-999"  style="width: 110%" value="#{buscaBikeMB.bike.usuario.cep}"/>  
                                     </div>
 
 
@@ -231,17 +237,17 @@
                                 <div class="row" style="margin-top: 1%">
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Email:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.usuario.email}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.usuario.email}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Telefone:" style="display: block"/>
-                                        <p:inputMask readonly="true" mask="(99)9999-9999" value="#{buscaBikeMB.bike.usuario.telefone}"/>
+                                        <p:inputMask  mask="(99)9999-9999" value="#{buscaBikeMB.bike.usuario.telefone}"/>
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Celular:" style="display: block"/>
-                                        <p:inputMask readonly="true" mask="(99)99999-9999" value="#{buscaBikeMB.bike.usuario.celular}"/>
+                                        <p:inputMask  mask="(99)99999-9999" value="#{buscaBikeMB.bike.usuario.celular}"/>
                                     </div>
 
                                 </div>
@@ -254,29 +260,29 @@
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="N° Quadro:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.chassi}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.chassi}"/>
                                     </div>
 
 
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Marca:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.marca}" />
+                                        <p:inputText  value="#{buscaBikeMB.bike.marca}" />
                                     </div>
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Modelo:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.modelo}" />
+                                        <p:inputText  value="#{buscaBikeMB.bike.modelo}" />
                                     </div>
 
                                     <div class="col-lg-3">
                                         <p:outputLabel value="Cores:" style="display: block"/>
-                                        <p:inputText style="width: 100%" readonly="true" value="#{buscaBikeMB.bike.cores}"/>
+                                        <p:inputText style="width: 100%"  value="#{buscaBikeMB.bike.cores}"/>
                                     </div>
 
                                     <div class="col-lg-1">
                                         <p:outputLabel value="Aro:" style="display: block"/>
-                                        <p:inputText style="width: 60%" readonly="true" value="#{buscaBikeMB.bike.aro}"/>
+                                        <p:inputText style="width: 60%"  value="#{buscaBikeMB.bike.aro}"/>
                                     </div>
 
 
@@ -288,22 +294,22 @@
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Marchas:" style="display: block"/>
-                                        <p:inputText readonly="true"  value="#{buscaBikeMB.bike.velocidades}"/>
+                                        <p:inputText   value="#{buscaBikeMB.bike.velocidades}"/>
                                     </div>
 
                                     <div class="col-lg-2" >
                                         <p:outputLabel value="Local da compra:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.localCompra}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.localCompra}"/>
                                     </div>
 
                                     <div class="col-lg-2" >
                                         <p:outputLabel value="Nota Fiscal:" style="display: block"/>
-                                        <p:inputText readonly="true" value="#{buscaBikeMB.bike.notaFiscal}"/>
+                                        <p:inputText  value="#{buscaBikeMB.bike.notaFiscal}"/>
                                     </div>
 
                                     <div class="col-lg-6" >
                                         <p:outputLabel value="Observação:" style="display: block"/>
-                                        <p:inputText readonly="true" style="width: 100%" value="#{buscaBikeMB.bike.observacao}" maxlength="200"/>
+                                        <p:inputText  style="width: 100%" value="#{buscaBikeMB.bike.observacao}" maxlength="200"/>
                                     </div>
 
                                 </div>
@@ -342,7 +348,7 @@
                                 <p:separator/>
 <!--                                <p:commandButton disabled="#{bikeMB.habilitarBO}"  onclick="PF('dlgBoletim').show();" styleClass="btn-menu"  value="Adicionar"/>-->
 
-                                <p:dataTable value="#{buscaBikeMB.boletins}" var="bo" emptyMessage="Nenhum boletim encontrado." style="margin-top: 1%; text-align: center">
+                                <p:dataTable paginator="true" paginatorTemplate="{PreviousPageLink} {NextPageLink}" paginatorPosition="top" rows="5" value="#{buscaBikeMB.boletins}" var="bo" emptyMessage="Nenhum boletim encontrado." style="margin-top: 1%; text-align: center">
                                     <f:facet name="header">
                                         Boletins de Ocorrência
                                     </f:facet>

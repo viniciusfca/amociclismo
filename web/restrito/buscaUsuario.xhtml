@@ -11,7 +11,9 @@
         <div class="main" >
             <center>
 
-                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
+                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" onkeypress="if (event.keyCode == 13) {
+                    return false;
+                }" >
                     
                     <p:dialog id="dlgExcluir" widgetVar="dlgExcluir" closable="false" style="background: transparent; box-shadow: none">
                         <div class="panel panel-primary" style="font-size: 11px;width: 100%;"  >
@@ -79,7 +81,7 @@
                                 <div class="row" style="margin-top: 1%">       
                                     <div class="col-lg-12">
 
-                                        <p:dataTable id="dtUsuarios" value="#{buscaUsuarioMB.usuarios}" var="user" style="margin-top: 1%;text-align: center" emptyMessage="Nenhum usuário encontrado.">
+                                        <p:dataTable paginator="true" paginatorTemplate="{PreviousPageLink} {NextPageLink}" paginatorPosition="top" rows="5" id="dtUsuarios" value="#{buscaUsuarioMB.usuarios}" var="user" style="margin-top: 1%;text-align: center" emptyMessage="Nenhum usuário encontrado.">
                                             <f:facet  name="header">
                                                 Usuários
                                             </f:facet>
@@ -92,15 +94,15 @@
                                                 <p:outputLabel value="#{user.cpf}" />
                                             </p:column>
 
-                                            <p:column headerText="Nome">
+                                            <p:column headerText="Nome" sortBy="#{user.nome}">
                                                 <p:outputLabel value="#{user.nome}"/>
                                             </p:column>
 
-                                            <p:column headerText="E-mail">
+                                            <p:column headerText="E-mail" sortBy="#{user.email}">
                                                 <p:outputLabel value="#{user.email}"/>
                                             </p:column>
 
-                                            <p:column headerText="Data Cadastro">
+                                            <p:column headerText="Data Cadastro" sortBy="#{user.dataCadastro}">
                                                 <p:outputLabel value="#{user.dataCadastro}">
                                                     <f:convertDateTime pattern="dd/MM/yyyy"/>
                                                 </p:outputLabel>
@@ -290,7 +292,7 @@
                                 
                                 <p:separator/>
                                 
-                                <p:dataTable value="#{buscaUsuarioMB.bikes}" style="text-align: center" var="b">
+                                <p:dataTable paginator="true" paginatorTemplate="{PreviousPageLink} {NextPageLink}" paginatorPosition="top" rows="5" value="#{buscaUsuarioMB.bikes}" style="text-align: center" var="b">
                                     <f:facet name="header">
                                         Bicicletas
                                     </f:facet>

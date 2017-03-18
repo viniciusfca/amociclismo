@@ -74,7 +74,33 @@ public class UsuarioDAO {
         return usuario;
     }
     
-    
+    /**
+     * Metodo que altera a senha do usuario.
+     * @param senha
+     * @param idUsuario 
+     */
+    public boolean alterarSenha(String senha, int idUsuario){
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        boolean retorno = false;
+        
+        try{
+            ps =  conexao.conectar().prepareCall("UPDATE usuario SET senha = ? WHERE id = ?");
+            ps.setString(1, Util.encrypt(senha));
+            ps.setInt(2, idUsuario);
+            
+            ps.executeUpdate();
+            
+            retorno = true;
+        }catch(Exception e){
+            System.out.println("Erro: " + e.getMessage());
+            retorno = false;
+        }finally{
+            conexao.desconectar();
+        }
+        
+        return retorno;
+    }
     
     /**
      * Metodo que insere um novo usuário na base

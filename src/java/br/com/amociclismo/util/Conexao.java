@@ -24,8 +24,8 @@ public class Conexao {
         try {
                   
             Class.forName("com.mysql.jdbc.Driver");
-            //connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/amocicli_bd?noAccessToProcedureBodies=true","amocicli_root", "Bike#$AmoBike");
-            connection = (Connection) DriverManager.getConnection("jdbc:mysql://192.175.112.170:3306/amocicli_bd?noAccessToProcedureBodies=true","amocicli_root", "Bike#$AmoBike");
+            connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/amocicli_bd?noAccessToProcedureBodies=true","amocicli_root", "Bike#$AmoBike");
+            //connection = (Connection) DriverManager.getConnection("jdbc:mysql://192.175.112.170:3306/amocicli_bd?noAccessToProcedureBodies=true","amocicli_root", "Bike#$AmoBike");
             
             return connection;
         } catch (Exception e) {

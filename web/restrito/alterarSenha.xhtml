@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  template="/template.xhtml"
+                 xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:p="http://primefaces.org/ui"
+                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content" >
+        <div class="main" >
+            <center>
+
+                <h:form id="formCadastro" style="margin-top: -120px;height: 1080px;width: 100%;" >
+
+
+                    <h:body >
+                        <div class="panel panel-info" style="font-size: 11px;margin-top: 8%; width: 85%;"  >
+                            <div style="text-align: left" class="panel-heading" >
+                                <b>ALTERAR SENHA</b>
+                            </div>
+
+                            <div class="panel" style="height: 10px;">
+                            </div>
+
+
+                            <div class="panel-body" style="margin-top: -1.3%; text-align: left">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <p:outputLabel style="display: block" value="Senha atual:"/>
+                                        <p:password value="#{alterarSenhaMB.senhaAtual}" style="width: 85%"/>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <p:outputLabel style="display: block" value="Senha nova:"/>
+                                        <p:password value="#{alterarSenhaMB.senhaNova}" id="password" style="width: 85%" maxlength="20" feedback="true" promptLabel="Insira sua nova senha." weakLabel="Fraco" goodLabel="Bom" strongLabel="Forte">
+                                        </p:password>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <p:outputLabel style="display: block" value="Confirmar senha:"/>
+                                        <p:password value="#{alterarSenhaMB.senhaConfirmar}" maxlength="20" style="width: 85%" />
+                                    </div>
+                                </div>
+                                <p:separator/>
+                                <div class="row" style="margin-top: 1%">
+                                    <div class="col-lg-4">
+                                        <p:commandButton action="#{alterarSenhaMB.alterarSenha()}"  value="Alterar senha" style="width: 150px; height: 27px"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:body>
+                </h:form>
+
+            </center>
+        </div>
+    </ui:define>
+</ui:composition>
