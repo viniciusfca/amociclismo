@@ -192,22 +192,22 @@ public class buscaBikeBean {
     public void buscarBike(){
         
         if(tipoPesquisa.equals("1")){
-            valorPesquisa = " chassi=" + valorPesquisa;
+            valorPesquisa = " chassi=" + valorPesquisa  ;
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
         
         if(tipoPesquisa.equals("2")){
-            valorPesquisa = " cores like '%" + valorPesquisa + "%'";
+            valorPesquisa = " cores like '%" + valorPesquisa + "%' ORDER BY cores";
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
         
         if(tipoPesquisa.equals("3")){
-            valorPesquisa = " marca like '%" + valorPesquisa + "%'";
+            valorPesquisa = " marca like '%" + valorPesquisa + "%' ORDER BY marca";
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
         
         if(tipoPesquisa.equals("4")){
-            valorPesquisa = " modelo like '%" + valorPesquisa + "%'";
+            valorPesquisa = " modelo like '%" + valorPesquisa + "%' ORDER BY modelo";
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
         

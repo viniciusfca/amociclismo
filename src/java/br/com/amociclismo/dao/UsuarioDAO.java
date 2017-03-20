@@ -254,7 +254,7 @@ public class UsuarioDAO {
 
         List<Usuario> usuarios = new ArrayList<Usuario>();
         try {
-            ps = conexao.conectar().prepareStatement("SELECT * FROM usuario WHERE nome LIKE '%"+nome+"%'");
+            ps = conexao.conectar().prepareStatement("SELECT * FROM usuario WHERE nome LIKE '%"+nome+"%' ORDER BY nome");
            
 
             ResultSet rs = ps.executeQuery();
