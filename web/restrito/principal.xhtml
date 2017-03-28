@@ -11,22 +11,14 @@
         <div class="main" >
             <center>
 
-                <h:form id="formCadastro" style="margin-top: -105px;height: 1080px;width: 100%;" >
+                <h:form id="formCadastro" style="margin-top: -105px;height: 1080px;width: 100%;text-align: left" >
 
            
                     <h:body  rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}">
-                        <div class="panel panel-info" style="font-size: 11px;margin-top: 8%; width: 85%;"  >
-                            <div style="text-align: left" class="panel-heading" >
-                                <b>RESUMO DE CADASTROS</b>
-                            </div>
-
-                            <div class="panel" style="height: 10px;">
-                            </div>
-
-                            <p:panel style="border: none; background: none" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}">
-                            <div class="panel-body" style="margin-top: -1.3%; text-align: left">
+                        <p:panel style="border: none; background: none" rendered="#{loginMB.retornarUsuarioLogado().tipo == 'A'}">
+                           
                                 
-                                <table class="table table-striped table-bordered" style="width: 350px; font-size: 12px">
+                                <table class="table table-striped table-bordered" style="width: 450px; font-size: 13px; background-color: white; margin-top: 8%;margin-left: 85px">
                                     <thead>
                                         <tr class="bg-primary">
                                             <th>Tipo</th>
@@ -50,9 +42,8 @@
                                     </tbody>
                                 </table>
                                 
-                            </div>
+                           
                             </p:panel>
-                        </div>
                     </h:body>
                 </h:form>
 
