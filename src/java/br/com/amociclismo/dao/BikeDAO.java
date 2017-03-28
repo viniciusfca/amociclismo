@@ -358,5 +358,41 @@ public class BikeDAO {
 
         return retorno;
     }
+    
+    
+    
+    /**
+     * Retorna uma lista de bikes pela pesquisa
+     *
+     * @param valorPesquisa
+     * @return
+     */
+    public List<Bike> listarBikeAll() {
+        String sql = "SELECT id FROM bike";
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        List<Bike> bikes = new ArrayList<Bike>();
+        try {
+            ps = conexao.conectar().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Usuario user = new Usuario();
+                UsuarioDAO usDAO = new UsuarioDAO();
+
+                Bike b = new Bike();
+                b.setId(rs.getInt("id"));
+                bikes.add(b);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return bikes;
+    }
 
 }

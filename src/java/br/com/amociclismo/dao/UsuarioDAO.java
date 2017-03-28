@@ -294,6 +294,41 @@ public class UsuarioDAO {
         return usuarios;
     }
     
+    
+    /**
+     * Meotodo que retorna uma lista de usuarios pelo nome
+     * @param nome
+     * @return 
+     */
+    public List<Usuario> getUsuarioAll() {
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+
+        List<Usuario> usuarios = new ArrayList<Usuario>();
+        try {
+            ps = conexao.conectar().prepareStatement("SELECT * FROM usuario");
+           
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                
+                usuarios.add(usuario);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return usuarios;
+    }
+    
+    
+    
     /**
      * Metodo que exclui usuario
      * @param idUsuario

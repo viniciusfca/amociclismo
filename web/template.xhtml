@@ -63,19 +63,34 @@ and open the template in the editor.
 
             <p:layoutUnit position="center">
 
-               
+
 
                 <div style="overflow-x: auto;background-image:url('http://www.amociclismo.com.br/Imagens/fundoSite.jpg'); height: 100%">
                     <p:panel style="border: none; background: none" rendered="#{loginMB.retornarUsuarioLogado() != null}">
-                    <ui:include src="/menu.xhtml" />
+                        <ui:include src="/menu.xhtml" />
                     </p:panel>
+
                     
-                    <ui:insert name="content" />
+                        <p:panel style="border: none; background: none" rendered="#{loginMB.retornarUsuarioLogado() == null}">
+                        <h3 style="font-weight: bold; text-shadow: 1px 0px white, -1px 0px 0px white, 0px 1px 0px white, 0px -1px 0px white; margin-left: 105px">APOIO</h3>
+                        <img style="width: 12%; margin-left: 70px; margin-top: -1%" src="http://www.amociclismo.com.br/Imagens/pm.png"/>
+                        </p:panel>
                     
-<!--                    <div style="margin-top: -10%">
-                    <ui:include  src="/patrocinio.xhtml" />
-                    </div>-->
                     
+                    
+                   
+                        <p:panel style="border: none; background: none; margin-top: -8%" rendered="#{loginMB.retornarUsuarioLogado() != null}">
+                            <h3 style="font-weight: bold;text-shadow: 1px 0px white, -1px 0px 0px white, 0px 1px 0px white, 0px -1px 0px white;margin-left: 105px">APOIO</h3>
+                        <img style="width: 12%;margin-left: 70px; margin-top: -1%" src="http://www.amociclismo.com.br/Imagens/pm.png"/>
+                        </p:panel>
+                    
+                    
+                    <ui:insert name="content"/>
+
+                    <!--                    <div style="margin-top: -10%">
+                                        <ui:include  src="/patrocinio.xhtml" />
+                                        </div>-->
+
                 </div>
             </p:layoutUnit>
 

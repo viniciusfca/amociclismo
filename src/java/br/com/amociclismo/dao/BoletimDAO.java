@@ -118,6 +118,39 @@ public class BoletimDAO {
         return boletins;
     }
     
+    
+    /**
+     * Metodo que retorna uma lista de boletins
+     *
+     * @param idBike
+     * @return
+     */
+    public List<Boletim> getListaBoletimAll() {
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        String sql = "SELECT id FROM boletim";
+        List<Boletim> boletins = new ArrayList<Boletim>();
+
+        try {
+            ps = conexao.conectar().prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Boletim bo = new Boletim();
+                bo.setId(rs.getInt("id"));
+                boletins.add(bo);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return boletins;
+    }
+    
     /**
      * Metodo que exclui boletim de ocorrencia
      * @param idBoletim 
