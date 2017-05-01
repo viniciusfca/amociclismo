@@ -34,7 +34,7 @@ public class BikeDAO {
         Conexao conexao = new Conexao();
         CallableStatement cst;
         PreparedStatement psUpdate = null;
-        String update = "UPDATE bike  SET chassi = ?, marca = ?, modelo = ?, cores = ?, aro = ?, velocidade = ?, observacao = ?, localCompra = ?, notaFiscal = ? WHERE id = ?";
+        String update = "UPDATE bike  SET chassi = ?, marca = ?, modelo = ?, cores = ?, aro = ?, velocidade = ?, observacao = ?, localCompra = ?, notaFiscal = ?, etiqueta = ? WHERE id = ?";
 
         try {
 
@@ -73,9 +73,11 @@ public class BikeDAO {
                 psUpdate.setString(7, bike.getObservacao());
                 psUpdate.setString(8, bike.getLocalCompra());
                 psUpdate.setString(9, bike.getNotaFiscal());
-                psUpdate.setInt(10, bike.getId());
+                psUpdate.setString(10, bike.getEtiqueta());
+                psUpdate.setInt(11, bike.getId());
 
                 psUpdate.executeUpdate();
+
             }
 
         } catch (Exception e) {
@@ -118,6 +120,7 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
+                b.setEtiqueta(rs.getString("etiqueta"));
                 b.setUsuario(user);
                 bikes.add(b);
             }
@@ -130,6 +133,50 @@ public class BikeDAO {
 
         return bikes;
 
+    }
+
+    /**
+     *
+     * @param etiqueta
+     * @return
+     */
+    public Bike getBikeByEtiqueta(String etiqueta) {
+        Conexao conexao = new Conexao();
+        PreparedStatement ps = null;
+        Bike b = new Bike();
+        try {
+            ps = conexao.conectar().prepareStatement("SELECT * FROM bike WHERE etiqueta = ?");
+            ps.setString(1, etiqueta);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                b.setId(rs.getInt("id"));
+                b.setAro(rs.getString("aro"));
+                b.setChassi(rs.getString("chassi"));
+                b.setCores(rs.getString("cores"));
+                b.setMarca(rs.getString("marca"));
+                b.setModelo(rs.getString("modelo"));
+                b.setNotaFiscal(rs.getString("notafiscal"));
+                b.setLocalCompra(rs.getString("localcompra"));
+                b.setObservacao(rs.getString("observacao"));
+                b.setVelocidades(rs.getString("velocidade"));
+                b.setEtiqueta(rs.getString("etiqueta"));
+
+                Usuario user = new Usuario();
+                UsuarioDAO usDAO = new UsuarioDAO();
+                user = usDAO.getUsuarioById(rs.getInt("idUsuario"));
+                b.setUsuario(user);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        } finally {
+            conexao.desconectar();
+        }
+
+        return b;
     }
 
     /**
@@ -159,6 +206,7 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
+                b.setEtiqueta(rs.getString("etiqueta"));
 
                 Usuario user = new Usuario();
                 UsuarioDAO usDAO = new UsuarioDAO();
@@ -249,6 +297,7 @@ public class BikeDAO {
                 b.setLocalCompra(rs.getString("localcompra"));
                 b.setObservacao(rs.getString("observacao"));
                 b.setVelocidades(rs.getString("velocidade"));
+                b.setEtiqueta(rs.getString("etiqueta"));
                 b.setUsuario(user);
                 bikes.add(b);
             }
@@ -309,10 +358,10 @@ public class BikeDAO {
 
             for (Bike b : bikeDAO.getBikesByIdUsuario(idUsuario)) {
                 ImageBikeDAO imgDAO = new ImageBikeDAO();
-                
-                BoletimDAO boDAO =  new BoletimDAO();
+
+                BoletimDAO boDAO = new BoletimDAO();
                 boDAO.deletarBoletimByBike(b.getId());
-                
+
                 for (ImageBike img : imgDAO.listar(b.getId())) {
 
                     try {
@@ -358,9 +407,7 @@ public class BikeDAO {
 
         return retorno;
     }
-    
-    
-    
+
     /**
      * Retorna uma lista de bikes pela pesquisa
      *

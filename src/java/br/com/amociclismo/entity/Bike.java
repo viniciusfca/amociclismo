@@ -23,6 +23,15 @@ public class Bike {
     private String observacao;
     private String localCompra;
     private String notaFiscal;
+    private String etiqueta;
+
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
+    }
     
     private List<Boletim> boletins;
 

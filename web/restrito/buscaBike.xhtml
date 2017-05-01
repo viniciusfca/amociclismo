@@ -74,6 +74,7 @@
                                                     <f:selectItem itemValue="3" itemLabel="Marca"/>
                                                     <f:selectItem itemValue="4" itemLabel="Modelo"/>
                                                     <f:selectItem itemValue="5" itemLabel="CPF do proprietário"/>
+                                                    <f:selectItem itemValue="6" itemLabel="Etiqueta"/>
                                                 </p:selectOneMenu>
                                             </div>
 
@@ -259,11 +260,14 @@
 
 
                                     <div class="col-lg-2">
+                                        <p:outputLabel value="Etiqueta:" style="display: block"/>
+                                        <p:inputText style="width: 100%" value="#{buscaBikeMB.bike.etiqueta}"/>
+                                    </div>
+                                    
+                                    <div class="col-lg-2">
                                         <p:outputLabel value="N° Quadro:" style="display: block"/>
                                         <p:inputText  value="#{buscaBikeMB.bike.chassi}"/>
                                     </div>
-
-
 
                                     <div class="col-lg-2">
                                         <p:outputLabel value="Marca:" style="display: block"/>

@@ -26,26 +26,26 @@ import org.primefaces.context.RequestContext;
  *
  * @author Vinicius
  */
-@ManagedBean(name="buscaBikeMB")
+@ManagedBean(name = "buscaBikeMB")
 @ViewScoped
 public class buscaBikeBean {
-    
+
     private Bike bike;
     private Usuario usuario;
     private ImageBike image;
-    
+
     private List<Bike> bikes;
     private List<Boletim> boletins;
     private List<ImageBike> images;
-    
+
     private BikeDAO bikeDAO;
     private UsuarioDAO usuarioDAO;
     private BoletimDAO boletimDAO;
     private ImageBikeDAO imageBikeDAO;
-    
+
     private String valorPesquisa;
     private String tipoPesquisa;
-    
+
     private boolean habiliarExcluir = true;
     private boolean habViewFotos = true;
 
@@ -54,24 +54,22 @@ public class buscaBikeBean {
         bike.setUsuario(new Usuario());
         this.usuario = new Usuario();
         image = new ImageBike();
-        
+
         this.bikes = new ArrayList<>();
         this.boletins = new ArrayList<>();
         images = new ArrayList<ImageBike>();
-        
-        
-        usuarioDAO =  new UsuarioDAO();
+
+        usuarioDAO = new UsuarioDAO();
         bikeDAO = new BikeDAO();
         boletimDAO = new BoletimDAO();
         imageBikeDAO = new ImageBikeDAO();
 
-        
-        tipoPesquisa = "3";
+        tipoPesquisa = "6";
     }
-    
-    
+
     /**
      * Meotodo que exclui image da bike
+     *
      * @param idImage
      * @param url
      */
@@ -79,52 +77,51 @@ public class buscaBikeBean {
         if (imageBikeDAO.excluir(idImage)) {
             Util.saveMessage("Sucesso!", "Imagem excluída com sucesso.");
             images = imageBikeDAO.listar(bike.getId());
-            
+
             try {
-             
-            int returnCode = 0;    
-            FTPClient ftp = new FTPClient();
-            ftp.connect("ftp.amociclismo.com.br");
 
-            //Verifico se o host é valido e faço login
-            if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-                ftp.login("amocicli", "Am326@CL80");
+                int returnCode = 0;
+                FTPClient ftp = new FTPClient();
+                ftp.connect("ftp.amociclismo.com.br");
 
-                //Altero o diretório corrente
-                ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
+                //Verifico se o host é valido e faço login
+                if (FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                    ftp.login("amocicli", "Am326@CL80");
 
-                ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
-                ftp.deleteFile("/public_html"+url);
-                ftp.disconnect();
-                
-                images = imageBikeDAO.listar(bike.getId());
+                    //Altero o diretório corrente
+                    ftp.changeWorkingDirectory("/public_html/Imagens/" + bike.getId());
 
-                if (images.size() > 0) {
-                    habViewFotos = false;
-                } else {
-                    habViewFotos = true;
+                    ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+                    ftp.deleteFile("/public_html" + url);
+                    ftp.disconnect();
+
+                    images = imageBikeDAO.listar(bike.getId());
+
+                    if (images.size() > 0) {
+                        habViewFotos = false;
+                    } else {
+                        habViewFotos = true;
+                    }
+
+                    RequestContext.getCurrentInstance().update("formCadastro");
+
                 }
 
-                RequestContext.getCurrentInstance().update("formCadastro");
-
+            } catch (Exception e) {
+                Util.saveMessage("Falha ao excluir imagem.", "Motivo: " + e.getMessage());
             }
-
-        } catch (Exception e) {
-            Util.saveMessage("Falha ao excluir imagem.", "Motivo: " + e.getMessage());
-        }
 
             if (images.size() > 0) {
                 habViewFotos = false;
             } else {
                 habViewFotos = true;
             }
-            
+
         } else {
             Util.saveMessage("Atenção", "Falha ao excluir a imagem.");
         }
     }
-    
-    
+
     /**
      * Metodo que salva uma nova bicicleta
      */
@@ -135,15 +132,18 @@ public class buscaBikeBean {
         }
 
         if (bike.getId() > 0) {
-            Util.saveMessage("Sucesso!", "Bicicleta cadastrada com sucesso.");
-            bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
-            boletins = boletimDAO.getListaBoletim(bike.getId());
+
+            if (validarCampos().equals("")) {
+                Util.saveMessage("Sucesso!", "Bicicleta cadastrada com sucesso.");
+                bikes = bikeDAO.getBikesByIdUsuario(Util.getUsuarioLogado().getId());
+                boletins = boletimDAO.getListaBoletim(bike.getId());
+            }
 
         } else {
             Util.saveMessage("Atenção!", "Falha ao cadastrar a bicicleta.");
         }
     }
-    
+
     /**
      * Metodo que valida campos antes de salvar
      *
@@ -182,78 +182,81 @@ public class buscaBikeBean {
             msg += "Erro";
         }
 
+        if (bikeDAO.getBikeByEtiqueta(bike.getEtiqueta()).getId() > 0) {
+            Util.saveMessage("Atenção", "Etiqueta já está cadastrada para outra bike.");
+            msg += "Erro";
+        }
+
         return msg;
     }
-    
-    
+
     /**
      * Metodo que retorna uma lista de bikes
      */
-    public void buscarBike(){
-        
-        if(tipoPesquisa.equals("1")){
-            valorPesquisa = " chassi=" + valorPesquisa  ;
+    public void buscarBike() {
+
+        if (tipoPesquisa.equals("1")) {
+            valorPesquisa = " chassi=" + valorPesquisa;
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
-        
-        if(tipoPesquisa.equals("2")){
+
+        if (tipoPesquisa.equals("2")) {
             valorPesquisa = " cores like '%" + valorPesquisa + "%' ORDER BY cores";
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
-        
-        if(tipoPesquisa.equals("3")){
+
+        if (tipoPesquisa.equals("3")) {
             valorPesquisa = " marca like '%" + valorPesquisa + "%' ORDER BY marca";
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
-        
-        if(tipoPesquisa.equals("4")){
+
+        if (tipoPesquisa.equals("4")) {
             valorPesquisa = " modelo like '%" + valorPesquisa + "%' ORDER BY modelo";
             bikes = bikeDAO.listarBike(valorPesquisa);
         }
-        
-        if(tipoPesquisa.equals("5")){
+
+        if (tipoPesquisa.equals("5")) {
             usuario = usuarioDAO.getUsuarioByCpf(valorPesquisa);
             bikes = bikeDAO.getBikesByIdUsuario(usuario.getId());
-            
         }
-        
-        
-        
+
+        if (tipoPesquisa.equals("6")) {
+            valorPesquisa = " etiqueta = '" + valorPesquisa + "' ORDER BY etiqueta";
+            bikes = bikeDAO.listarBike(valorPesquisa);
+        }
+
     }
-    
-    
-    public void excluirBike(){
-        if(bikeDAO.excluirBike(bike.getId())){
+
+    public void excluirBike() {
+        if (bikeDAO.excluirBike(bike.getId())) {
             bike = new Bike();
             Util.saveMessage("Sucesso", "Bicicleta excluída com sucesso!");
             RequestContext.getCurrentInstance().execute("PF('dlgExcluir').hide()");
             habiliarExcluir = true;
-        }else{
+        } else {
             Util.saveMessage("Atenção", "Falha ao excluir bicicleta!");
         }
     }
-    
-    
-    ///Getters and Setters
 
+    ///Getters and Setters
     public Bike getBike() {
         return bike;
     }
 
     public void setBike(Bike bike) {
         this.bike = bike;
-        boletins =  boletimDAO.getListaBoletim(bike.getId());
+        boletins = boletimDAO.getListaBoletim(bike.getId());
         valorPesquisa = "";
         tipoPesquisa = "3";
         bikes.clear();
         habiliarExcluir = false;
-        
+
         images = imageBikeDAO.listar(bike.getId());
         if (images.size() > 0) {
-                habViewFotos = false;
-            } else {
-                habViewFotos = true;
-            }
+            habViewFotos = false;
+        } else {
+            habViewFotos = true;
+        }
     }
 
     public Usuario getUsuario() {
@@ -327,7 +330,5 @@ public class buscaBikeBean {
     public void setHabViewFotos(boolean habViewFotos) {
         this.habViewFotos = habViewFotos;
     }
-    
-    
-   
+
 }
